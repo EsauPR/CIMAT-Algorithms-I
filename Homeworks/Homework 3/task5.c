@@ -9,52 +9,82 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-​
+
 typedef struct node {
     int value;
     struct  node * next;
-} NODE;
+} Node;
 
-​
-void print(NODE * root) {
-    if (root == NULL) {
+
+void print(Node * node) {
+    if (node == NULL) {
         puts("");
         return;
     };
-    printf("%d ", root->value);
-    print(root->next);
+    printf("%d ", node->value);
+    print(node->next);
 }
-​
-​
-void insert(NODE ** root, int num) {
-    if (*root == NULL) {
-        (*root) = new NODE();
-        (*root)->value = num;
+
+
+void add_element(Node ** node, int num) {
+    if (*node == NULL) {
+        (*node) = (Node *)malloc(sizeof(Node));
+        (*node)->value = num;
+        (*node)->next = NULL;
         return;
     }
-​
-    if (num <= (*root)->value) {
-        insert(&(*root)->left, num);
-    } else {
-        insert(&(*root)->right, num);
-    }
-}
-​
-int main(int argc, char const *argv[]) {
-    NODE * root = NULL;
-    int nelems = 9;
-    int elems_to_insert[nelems] = {8, 3, 10, 1, 6, 14, 4, 7, 13};
-​
-    for (int i = 0; i < nelems; i++) {
-        insert(&root, elems_to_insert[i]);
-    }
-​
-    print(root);
-    return 0;
+
+    add_element(&(*node)->next, num);
 }
 
 
+void liberate(Node * node) {
+    if (node == NULL) {
+        return;
+    }
+    liberate(node->next);
+    free(node);
+}
+
+
+int get_kth_value(Node * node, int k) {
+    if (node == NULL) {
+        return 0;
+    }
+
+    if(k == 1) {
+        return node->value;
+    }
+
+    return get_kth_value(node->next, k - 1);
+}
+
+int is_equal(Node * node1, Node * node2) {
+    if (node1 == NULL && node2 == NULL) {
+        return 1;
+    }
+
+    if (node1 == NULL && node2 != NULL) {
+        return 0;
+    }
+
+    if (node1 != NULL && node2 == NULL) {
+        return 0;
+    }
+
+    if (node1->value != node2->value) {
+        return 0;
+    }
+
+    return is_equal(node1->next, node2->next);
+}
+
 int main(int argc, char const *argv[]) {
+    Node * list = NULL;
+
+
+
+    print(list);
 
     return 0;
 }
