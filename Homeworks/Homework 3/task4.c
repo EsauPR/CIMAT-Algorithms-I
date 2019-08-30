@@ -21,7 +21,7 @@ int ** allocate_pascal_triangle(int n) {
         exit(EXIT_FAILURE);
     }
 
-    // We need only n*(n+1)/2 spaces for int
+    // We need only n*(n+1)/2 spaces of int
     *pascal_triangle = (int *) malloc(sizeof(int) * n * (n + 1) / 2);
     if (*pascal_triangle == NULL) {
         perror("allocate_pascal_triangle(): ");

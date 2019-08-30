@@ -22,14 +22,22 @@ typedef struct node {
     new node at the end of the list
 */
 void add_element(Node ** node, int num) {
-    if (*node == NULL) {
-        (*node) = (Node *)malloc(sizeof(Node));
-        (*node)->value = num;
-        (*node)->next = NULL;
+    if (*node != NULL) {
+        add_element(&(*node)->next, num);
         return;
     }
 
-    add_element(&(*node)->next, num);
+    *node = (Node *)malloc(sizeof(Node));
+
+    if (*node == NULL) {
+        perror("add_element(): ");
+        return;
+    }
+
+    (*node)->value = num;
+    (*node)->next = NULL;
+
+    return;
 }
 
 
@@ -114,12 +122,12 @@ int main(int argc, char const *argv[]) {
     if(is_equal(list1, list2)) {
         puts("The lists are equals");
     } else {
-        puts("The lists are not equals");
+        puts("The lists are not equal");
     }
 
     //  Get the k-th element
-    printf("%d-th element for list 1 is: %d\n", 30, get_kth_value(list1, 30));
-    printf("%d-th element for list 2 is: %d\n", 40, get_kth_value(list2, 40));
+    printf("The %d-th element for list 1 is: %d\n", 30, get_kth_value(list1, 30));
+    printf("The %d-th element for list 2 is: %d\n", 40, get_kth_value(list2, 40));
 
     liberate(list1);
     liberate(list2);
