@@ -19,23 +19,19 @@ typedef struct node {
 
 /*
     Insert and allocate memory for a
-    new node at the end of the list
+    new node at the beggining of the list
 */
 void add_element(Node ** node, int num) {
-    if (*node != NULL) {
-        add_element(&(*node)->next, num);
-        return;
-    }
+    Node * tmp = (Node *)malloc(sizeof(Node));
 
-    *node = (Node *)malloc(sizeof(Node));
-
-    if (*node == NULL) {
+    if (tmp == NULL) {
         perror("add_element(): ");
         return;
     }
 
-    (*node)->value = num;
-    (*node)->next = NULL;
+    tmp->value = num;
+    tmp->next = *node;
+    *node = tmp;
 
     return;
 }
