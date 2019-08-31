@@ -43,6 +43,7 @@ void print(Node * node) {
         puts("");
         return;
     };
+
     printf("%d -> ", node->value);
     print(node->next);
 }
@@ -53,6 +54,7 @@ void liberate(Node * node) {
     if (node == NULL) {
         return;
     }
+
     liberate(node->next);
     free(node);
 }
@@ -64,7 +66,7 @@ int get_kth_value(Node * node, int k) {
         return 0;
     }
 
-    if(k == 1) {
+    if(k <= 1) {
         return node->value;
     }
 
