@@ -1,7 +1,7 @@
 /**
     ANSI C standard: c11
-    filename.c|cpp
-    Purpose: Module description
+    main.c
+    Purpose: Read and write images type pgm P2
 
     @author Esaú Peralta
     @email esau.opr@gmail.com
