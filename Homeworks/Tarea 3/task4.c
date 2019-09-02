@@ -9,6 +9,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int ** allocate_pascal_triangle(int n);
+void fill_pascal_triangle(int ** pascal_triangle, int n);
+void print_pascal_triangle(int ** pascal_triangle, int n);
+
 
 /*
     Create and return double pointer to the
