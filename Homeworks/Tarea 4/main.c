@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 /* Struct for pgm images */
 const struct pgmStruct {
     unsigned char ** content;
@@ -20,20 +21,29 @@ const struct pgmStruct {
     unsigned char max_gray_value;
 
 } pgmImageDefault = {NULL, NULL, NULL, 0, 0, 0};
-
 typedef struct pgmStruct pgmImage;
+
+/* Create memory to store the image pixels */
+unsigned char ** allocate_pgmImage_content(int height, int width);
+/* Reade the img file */
+pgmImage read_pgmImage(const char * file_name);
+/* Save a pgmImage struct into .pgm file*/
+void write_pgmImage(pgmImage img, char * file_name);
+/* Liberate the memory allocated for pgm image */
+void free_pgmImage(pgmImage * img);
+
 
 /* Create memory to store the image pixels */
 unsigned char ** allocate_pgmImage_content(int height, int width) {
     unsigned char ** content = (unsigned char **)malloc(sizeof(unsigned char *) * height);
     if (content == NULL) {
-        perror("allocate_content()");
+        perror("allocate_pgmImage_content()");
         exit(EXIT_FAILURE);
     }
 
-    *content = (unsigned char *)malloc(sizeof(int) * height * width);
+    *content = (unsigned char *)malloc(sizeof(unsigned char) * height * width);
     if (*content == NULL) {
-        perror("allocate_content()");
+        perror("allocate_pgmImage_content()");
         free(content);
         exit(EXIT_FAILURE);
     }
@@ -62,6 +72,7 @@ pgmImage read_pgmImage(const char * file_name) {
     str_len = getline(&img.format, &str_buf_size, fp);
     if ( str_len < 3 || img.format[0] != 'P' || img.format[1] != '2') {
         puts("Invalid format header");
+        fclose(fp);
         return img;
     }
 
@@ -84,9 +95,11 @@ pgmImage read_pgmImage(const char * file_name) {
     img.content = allocate_pgmImage_content(img.height, img.width);
 
     // Read the img pixels
+    int tmp;
     for (int i = 0; i < img.height; i++) {
         for (int j = 0; j < img.width; j++) {
-            fscanf(fp, "%d", (int *)&img.content[i][j]);
+            fscanf(fp, "%d", &tmp);
+            img.content[i][j] = tmp;
         }
     }
 
