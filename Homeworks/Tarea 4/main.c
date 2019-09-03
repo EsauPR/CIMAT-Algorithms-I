@@ -21,6 +21,7 @@ const struct pgmStruct {
     unsigned char max_gray_value;
 
 } pgmImageDefault = {NULL, NULL, NULL, 0, 0, 0};
+
 typedef struct pgmStruct pgmImage;
 
 /* Create memory to store the image pixels */
@@ -70,7 +71,7 @@ pgmImage read_pgmImage(const char * file_name) {
 
     // Read first line containing the image format
     str_len = getline(&img.format, &str_buf_size, fp);
-    if ( str_len < 3 || img.format[0] != 'P' || img.format[1] != '2') {
+    if ( str_len < 3 || img.format[0] != 'P' || (img.format[1] != '2' && img.format[1] != '5')) {
         puts("Invalid format header");
         fclose(fp);
         return img;
@@ -89,18 +90,30 @@ pgmImage read_pgmImage(const char * file_name) {
         free(comment);
     }
 
-    fscanf(fp, "%d", (int *)&img.max_gray_value);
+    fscanf(fp, "%d\n", (int *)&img.max_gray_value);
 
     // Allocate memory to read the img content
     img.content = allocate_pgmImage_content(img.height, img.width);
 
-    // Read the img pixels
-    int tmp;
-    for (int i = 0; i < img.height; i++) {
-        for (int j = 0; j < img.width; j++) {
-            fscanf(fp, "%d", &tmp);
-            img.content[i][j] = tmp;
+    // Read the pixels values
+    if (img.format[1] == '2') {
+        // Read the img pixels for magic code P2
+        int tmp;
+        for (int i = 0; i < img.height; i++) {
+            for (int j = 0; j < img.width; j++) {
+                fscanf(fp, "%d", &tmp);
+                img.content[i][j] = tmp;
+            }
         }
+    } else {
+        // Read the img pixels for magic code P5
+        char *line = NULL;
+        str_buf_size = 0;
+        str_len = getline(&line, &str_buf_size, fp);
+        for (int j = 0; j < img.height * img.width; j++) {
+            (*img.content)[j] = line[j];
+        }
+        free(line);
     }
 
     fclose(fp);
@@ -116,7 +129,6 @@ void write_pgmImage(pgmImage img, char * file_name) {
         return;
     }
 
-
     fprintf(fp, "%s", img.format);
 
     if (img.comment != NULL) {
@@ -128,9 +140,15 @@ void write_pgmImage(pgmImage img, char * file_name) {
 
     for (int i = 0; i < img.height; i++) {
         for (int j = 0; j < img.width; j++) {
-            fprintf(fp, "%d ", img.content[i][j]);
+            if (img.format[1] == '2') {
+                fprintf(fp, "%d ", img.content[i][j]);
+            } else {
+                fprintf(fp, "%c", img.content[i][j]);
+            }
         }
-        fprintf(fp, "\n");
+        if (img.format[1] == '2') {
+            fprintf(fp, "\n");
+        }
     }
 
     fclose(fp);
