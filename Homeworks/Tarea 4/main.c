@@ -107,13 +107,11 @@ pgmImage read_pgmImage(const char * file_name) {
         }
     } else {
         // Read the img pixels for magic code P5
-        char *line = NULL;
-        str_buf_size = 0;
-        str_len = getline(&line, &str_buf_size, fp);
-        for (int j = 0; j < img.height * img.width; j++) {
-            (*img.content)[j] = line[j];
+        for (int i = 0; i < img.height; i++) {
+            for (int j = 0; j < img.width; j++) {
+                fscanf(fp, "%c", &img.content[i][j]);
+            }
         }
-        free(line);
     }
 
     fclose(fp);
