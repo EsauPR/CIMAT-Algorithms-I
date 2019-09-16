@@ -28,10 +28,16 @@ char parse_char(char c) {
 
 /* Read 'nwords' from a file and return the number of already read words */
 int read_words(const char * file_name, char words[][WORD_SIZE], int nwords) {
-    FILE *fp = fopen(file_name, "r");
     char tmp ;
-
     int nwords_read = 0;
+
+    FILE *fp = fopen(file_name, "r");
+
+    if (fp == NULL) {
+        perror(file_name);
+        exit(EXIT_FAILURE);
+    }
+
     for (int i = 0, char_pos = 0; i < nwords; i++, char_pos = 0) {
         while(fscanf(fp, "%c", &tmp) != EOF) {
             tmp = parse_char(tmp);
