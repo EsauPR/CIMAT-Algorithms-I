@@ -11,16 +11,57 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define WORD_SIZE 30
+#define WORD_SIZE 55
+#define MAX_WORDS 10000
 
-/* Transform a character to lowercase and ignore non alphabetic characters */
+#define MIN(a, b) (((a) < (b))? (a):(b))
+
+/*
+    Transform a character to lowercase,
+    remove tildes, and transform non alphabetic characters
+    to spaces
+*/
 char parse_char(char c) {
+    // Upercase to lowercase
     if (65 <= c && c <= 90) {
         return c + 32;
     }
-
-    if (97 <= c && c <= 122) {
+    // Lowercase or digit
+    if ((97 <= c && c <= 122) || ('0' <= c && c <= '9')) {
         return c;
+    }
+
+    // Compare the second part of the ascci representation for especial chars
+    // The first part is equals to -61
+
+    // Á or á to a
+    if (c == -127 || c == -95) {
+        return 'a';
+    }
+    // É or é to e
+    if (c == -119 || c == -87) {
+        return 'e';
+    }
+    // Í or í to i
+    if (c == -115 || c == -83) {
+        return 'i';
+    }
+    // Ó or ó to o
+    if (c == -109 || c == -77) {
+        return 'o';
+    }
+    // Ú or ú to u
+    if (c == -102 || c == -70) {
+        return 'u';
+    }
+    // Ü or ü to u
+    if (c == -100 || c == -68) {
+        return 'u';
+    }
+
+    // Ñ or ñ to n
+    if (c == -111 || c == -79) {
+        return 'n';
     }
 
     return ' ';
@@ -40,6 +81,8 @@ int read_words(const char * file_name, char words[][WORD_SIZE], int nwords) {
 
     for (int i = 0, char_pos = 0; i < nwords; i++, char_pos = 0) {
         while(fscanf(fp, "%c", &tmp) != EOF) {
+            if (tmp == -61) continue;
+
             tmp = parse_char(tmp);
             if (tmp == ' ') { // End of word
                 if (char_pos == 0) { // unread word
@@ -138,20 +181,34 @@ void print_words(char words[][WORD_SIZE], int nwords) {
     puts("\n");
 }
 
+/* Remove tildes and other weird things */
+void parse_str(char * str) {
+    int size = strlen(str);
+    int pos = 0;
+    for (int i = 0; i < size; i++) {
+        if (str[i] == -61) continue; // Indicates the beginning of a weird thing
+        str[pos++] = parse_char(str[i]);
+    }
+    printf("\n");
+    str[pos] = '\0';
+}
+
 /* Quick search menu */
 void search_menu(char words[][WORD_SIZE], int nwords) {
     char word[WORD_SIZE], option;
 
     while(1) {
-        printf("\nMenu:\n\t1) Exit\n\t2) Search a word\noption: ");
+        printf("\nMenu:\n\t0) Exit\n\t1) Search a word\noption: ");
         scanf("\n%c", &option);
 
-        if (option == '1') break;
-        if (option != '2') continue;
+        if (option == '0') break;
+        if (option != '1') continue;
 
 
-        printf("Word to search: ");
+        printf("\nWord to search: ");
         scanf("%s", word);
+        parse_str(word);
+
         if(search_word(words, nwords, word)) {
             printf("The word '%s' exists into the dictionary\n", word);
         } else {
@@ -170,8 +227,9 @@ int main(int argc, char const *argv[]) {
     int nwords = 0;
     printf("Number of words to read: ");
     scanf("%d", &nwords);
+    nwords = MIN(nwords, MAX_WORDS);
 
-    char words[nwords][WORD_SIZE];
+    char words[nwords][WORD_SIZE]; // The task indicates to use static memory
     nwords = read_words(argv[1], words, nwords);
     puts("\nWords read:");
     print_words(words, nwords);
