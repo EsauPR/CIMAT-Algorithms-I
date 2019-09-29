@@ -1,19 +1,16 @@
 /**
     ANSI C standard: c11
     stack.c
-    Purpose: Prototype for Stack simulation with two queues
+    Purpose: Prototype for fixed Stack implementation
 
     @author Esaú Peralta
     @email esau.opr@gmail.com
 */
 
-#include "queue.h"
-
 typedef struct  StructStack {
     int max_size;
-    int size;
-    int index;
-    Queue queues[2];
+    int top;
+    int * data;
 } Stack;
 
 /* Allocate memory for the stack */
@@ -23,7 +20,7 @@ extern void stack_push(Stack * stack, int num);
 /* Pop a integer into the stack */
 extern int stack_pop(Stack * stack);
 /* Get the top element from the stack */
-extern int stack_top(Stack * stack);
+extern int stack_top(Stack stack);
 /* Return 1 is the stack is empty zero otherwise */
 extern int stack_empty(Stack stack);
 /* Return que stack size */

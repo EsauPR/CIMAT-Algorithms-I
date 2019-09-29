@@ -1,17 +1,18 @@
 /**
     ANSI C standard: c11
     queue.c
-    Purpose: Prototype for Fixed Queue implementation
+    Purpose: Prototype for Queue implementation with two stacks
 
     @author Esaú Peralta
     @email esau.opr@gmail.com
 */
 
+#include "stack.h"
+
 typedef struct QueueStruct {
     int max_size;
-    int back;
     int front;
-    int * data;
+    Stack stacks[2];
 } Queue;
 
 
@@ -22,7 +23,7 @@ extern void queue_push(Queue * queue, int num);
 /* Pop a integer into the queue */
 extern int queue_pop(Queue * queue);
 /* Get the first element from the queue */
-extern int queue_front(Queue queue);
+extern int queue_front(Queue * queue);
 /* Return 1 is the queue is empty zero otherwise */
 extern int queue_empty(Queue queue);
 /* Return que queue size */

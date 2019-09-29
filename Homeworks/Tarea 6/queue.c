@@ -1,27 +1,29 @@
 /**
     ANSI C standard: c11
     queue.c
-    Purpose: Fixed Queue implementation
+    Purpose: Queue implementation with two stacks
 
     @author Esaú Peralta
     @email esau.opr@gmail.com
 */
 
-#include <stdlib.h>
 #include "queue.h"
 
 /* Allocate memory for the queue */
 Queue queue_create(int max_size) {
-    Queue queue = {max_size, -1, 0, NULL};
-    queue.data = (int *)malloc(sizeof(int) * max_size);
+    Queue queue = {max_size, -1, {
+        stack_create(max_size),
+        stack_create(max_size)
+    }};
+
     return queue;
 }
 /* Push a integer into the queue */
 void queue_push(Queue * queue, int num) {
-    int next = (queue->back + 1) % queue->max_size;
-    if (queue->back != -1 && next == queue->front ) return;
-    queue->back = next;
-    queue->data[next] = num;
+    if (queue->front == queue->max_size -1) return;
+
+    stack_push(&queue->stacks[0], num);
+    queue->front ++;
 }
 
 
@@ -29,46 +31,52 @@ void queue_push(Queue * queue, int num) {
 int queue_pop(Queue * queue) {
     if (queue_empty(*queue)) return -1;
 
-    int num = queue->data[queue->front];
-
-    if (queue->front == queue->back) {
-        queue->back = -1;
-        queue->front = 0;
-    } else {
-        queue->front = (queue->front + 1) % queue->max_size;
+    while(stack_size(queue->stacks[0]) > 1) {
+        stack_push(&queue->stacks[1], stack_pop(&queue->stacks[0]));
     }
+
+    int num = stack_pop(&queue->stacks[0]);
+
+    while(!stack_empty(queue->stacks[1])) {
+        stack_push(&queue->stacks[0], stack_pop(&queue->stacks[1]));
+    }
+
+    queue->front --;
 
     return num;
 }
 
 /* Get the first element from the queue */
-int queue_front(Queue queue) {
-    return queue.data[queue.front];
+int queue_front(Queue * queue) {
+    if (queue_empty(*queue)) return -1;
+
+    while(stack_size(queue->stacks[0]) > 1) {
+        stack_push(&queue->stacks[1], stack_pop(&queue->stacks[0]));
+    }
+
+    int num = stack_pop(&queue->stacks[0]);
+    stack_push(&queue->stacks[1], num);
+
+    while(!stack_empty(queue->stacks[1])) {
+        stack_push(&queue->stacks[0], stack_pop(&queue->stacks[1]));
+    }
+
+    return num;
 }
 
 /* Return 1 is the queue is empty zero otherwise */
 int queue_empty(Queue queue) {
-    return queue.back == -1;
+    return queue.front == -1;
 }
 
 /* Return que queue size */
 int queue_size(Queue queue) {
-    int size = 0;
-
-    if (queue.back == -1) {
-        size = 0;
-    }else if (queue.back >= queue.front) {
-        size = queue.back - queue.front + 1;
-    } else {
-        size = queue.max_size - queue.front + queue.back + 1;
-    }
-
-    return size;
+    return queue.front + 1;
 }
 
 /* Liberate the memory allocated for the queue */
 void queue_free(Queue * queue) {
-    free(queue->data);
-    queue->back = -1;
-    queue->front = 0;
+    queue->front = -1;
+    stack_free(&queue->stacks[0]);
+    stack_free(&queue->stacks[1]);
 }
