@@ -23,7 +23,18 @@ int main(int argc, char const *argv[]) {
         tree_rb_print(root);
     }
 
-    // tree_rb_print(root);
+    int nkeys = 3;
+    int keys[] = {-1, 20, 5};
+
+    puts("");
+    for (int i = 0; i < nkeys; i++) {
+        if(tree_rb_find(root, keys[i])) {
+            printf("The key '%d' exists\n", keys[i]);
+        } else {
+            printf("The key '%d' does not exists\n", keys[i]);
+        }
+    }
+
     tree_rb_free(root);
     return 0;
 }
