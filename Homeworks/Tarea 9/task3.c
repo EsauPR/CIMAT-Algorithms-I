@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* Compute the Probability */
 double prob(int n, int p, int a, double dp[n][n]) {
     if (p == a) {
         return 0.5;
