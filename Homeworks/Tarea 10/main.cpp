@@ -10,17 +10,16 @@
 #include <stdio.h>
 
 #include <iostream>
+#include <string>
 #include <vector>
 #include <map>
 #include <fstream>
-#include <iterator>
-#include <string>
-#include <sstream>
 
 using namespace std;
 
 #define frequencyMap map<string, pair<int, int> >
 #define dictionary map<string, int >
+
 
 frequencyMap load_frec_map(string file_name, frequencyMap frecs, bool is_spam) {
     ifstream infile(file_name);
