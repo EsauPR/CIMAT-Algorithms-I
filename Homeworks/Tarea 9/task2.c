@@ -6,14 +6,18 @@
     @author Esaú Peralta
     @email esau.opr@gmail.com
 */
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 
 
 /*
     Find the max length of the a palindromic subsecuence
+
+    First aproach: Buttom -> Top
 
     This algorithm needs a squere matrix with dimentions equals to the string length.
 
@@ -53,6 +57,38 @@ int find_max_palindromic_subsecuence(char * str, int size, int dp[][size]) {
     return dp[0][size-1];
 }
 
+/*
+    Find the max length of the a palindromic subsecuence
+
+    Second aproach: Top -> Buttom
+*/
+int find_max_palindromic_subsecuence2(char * str, int size, int dp[][size], int i, int j) {
+    if (i == j) {
+        return 1; // Each letter is a palindrome of lenght 1
+    }
+
+    if (dp[i][j] != 0) {
+        return dp[i][j];
+    }
+
+    if (str[i] == str[j]) {
+        // If the first and last letter of a substring are the same
+        // the solution is 2 + the solution for the substring of length i+1 to i+length-1
+        dp[i][j] = find_max_palindromic_subsecuence2(str, size, dp, i+1, j-1) + 2;
+    }
+    else {
+        // If the first and last letter of a substring are diferents
+        // the solution is the max length for the substring of length i+1 to i+length
+        // or the substring of length i  to i+length-1
+        dp[i][j] = MAX(
+            find_max_palindromic_subsecuence2(str, size, dp, i+1, j),
+            find_max_palindromic_subsecuence2(str, size, dp, i, j-1)
+        );
+    }
+
+    return dp[i][j];
+}
+
 
 /* Print the solution for the palindrome */
 void print_palindrome(char * str, int size, int dp[][size], int i, int j) {
@@ -82,7 +118,16 @@ int main(int argc, char const *argv[]) {
 
         int dp[size][size];
 
-        printf("Max length: %d, Palindrome: ", find_max_palindromic_subsecuence(str, size, dp));
+
+        printf("Button-Top -> Max length: %d, Palindrome: ", find_max_palindromic_subsecuence(str, size, dp));
+        print_palindrome(str, size, dp, 0, size-1);
+        puts("");
+
+        for (int i = 0; i < size; i++) {
+            memset(dp[i], 0, sizeof(int) * size);
+        }
+
+        printf("Top-Button -> Max length: %d, Palindrome: ", find_max_palindromic_subsecuence2(str, size, dp, 0, size-1));
 
         print_palindrome(str, size, dp, 0, size-1);
         puts("");
