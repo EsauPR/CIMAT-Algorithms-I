@@ -14,8 +14,8 @@
 int main(int argc, char const *argv[]) {
     Node * root = NULL;
 
-    int ndata = 8;
-    int data[] = {10, 20, -10, 15, 17, 40, 50, 60};
+    int ndata = 12;
+    int data[] = {50, 25, 10, 7, 6, 0, -3, -5, -8, -10, -33, -45};
 
     for (int i = 0; i < ndata; i++) {
         printf("\nInsert %d\n", data[i]);

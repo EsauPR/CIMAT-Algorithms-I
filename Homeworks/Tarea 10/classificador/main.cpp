@@ -21,6 +21,7 @@ using namespace std;
 #define dictionary map<string, int >
 
 
+/* Buld a map with the words frequency for emails span and no spam */
 frequencyMap load_frec_map(string file_name, frequencyMap frecs, bool is_spam) {
     ifstream infile(file_name);
     if (!infile.is_open()) {
@@ -39,10 +40,12 @@ frequencyMap load_frec_map(string file_name, frequencyMap frecs, bool is_spam) {
         }
     }
 
+    infile.close();
+
     return frecs;
 }
 
-
+/* Remove the words from the frquency map that does not have any match in spam or no spam */
 frequencyMap clean_freqs(frequencyMap frecs) {
     frequencyMap frecs_clean;
     frequencyMap::iterator it;
@@ -54,6 +57,7 @@ frequencyMap clean_freqs(frequencyMap frecs) {
     return frecs_clean;
 }
 
+/* Read the text that will be clasified in a dictionary */
 dictionary load_text(string file_name) {
     ifstream infile(file_name);
     if (!infile.is_open()) {
@@ -70,10 +74,12 @@ dictionary load_text(string file_name) {
         dict[word]++;
     }
 
+    infile.close();
+
     return dict;
 }
 
-
+/* Return a true if the text is spam or false otherwise */
 bool is_spam(frequencyMap frecs, dictionary text) {
     int total_spam = 0, total_no_spam = 0;
     frequencyMap::iterator it;
@@ -93,7 +99,7 @@ bool is_spam(frequencyMap frecs, dictionary text) {
         prob_no_spam *= frecs[it2->first].second / total_no_spam;
     }
 
-    // cout << prob_spam << " " << prob_no_spam << endl;
+    cout << "Prob Spam: " << prob_spam << " Prob no Spam:" << prob_no_spam << endl;
 
     return prob_spam > prob_no_spam;
 }
@@ -106,8 +112,8 @@ int main(int argc, char const *argv[]) {
     }
 
     frequencyMap frecs;
-    frecs = load_frec_map(argv[1], frecs, false);
     frecs = load_frec_map(argv[2], frecs, true);
+    frecs = load_frec_map(argv[1], frecs, false);
     frecs = clean_freqs(frecs);
 
     frequencyMap::iterator it;
