@@ -12,38 +12,14 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <map>
 #include <fstream>
+#include <cmath>
+
+#include "ccv_parser.h"
 
 using namespace std;
 
-#define frequencyMap map<string, pair<int, int> >
 #define dictionary map<string, int >
-
-
-/* Buld a map with the words frequency for emails span and no spam */
-frequencyMap load_frec_map(string file_name, frequencyMap frecs, bool is_spam) {
-    ifstream infile(file_name);
-    if (!infile.is_open()) {
-        cout << "Unable to open the file " << file_name << endl;
-        exit(EXIT_FAILURE);
-    }
-
-    while (!infile.eof()) {
-        string word;
-        infile >> word;
-        if (word.size() <= 3) continue;
-        if (is_spam) {
-            frecs[word].first++;
-        } else {
-            frecs[word].second++;
-        }
-    }
-
-    infile.close();
-
-    return frecs;
-}
 
 /* Remove the words from the frquency map that does not have any match in spam or no spam */
 frequencyMap clean_freqs(frequencyMap frecs) {
@@ -57,30 +33,8 @@ frequencyMap clean_freqs(frequencyMap frecs) {
     return frecs_clean;
 }
 
-/* Read the text that will be clasified in a dictionary */
-dictionary load_text(string file_name) {
-    ifstream infile(file_name);
-    if (!infile.is_open()) {
-        cout << "Unable to open the file " << file_name << endl;
-        exit(EXIT_FAILURE);
-    }
-
-    dictionary dict;
-
-    while (!infile.eof()) {
-        string word;
-        infile >> word;
-        if (word.size() <= 3) continue;
-        dict[word]++;
-    }
-
-    infile.close();
-
-    return dict;
-}
-
 /* Return a true if the text is spam or false otherwise */
-bool is_spam(frequencyMap frecs, dictionary text) {
+bool is_spam(frequencyMap frecs, vector<string> text) {
     int total_spam = 0, total_no_spam = 0;
     frequencyMap::iterator it;
     for (it = frecs.begin(); it != frecs.end(); it++) {
@@ -88,52 +42,50 @@ bool is_spam(frequencyMap frecs, dictionary text) {
         total_no_spam += it->second.second;
     }
 
-    double prob_spam = 1.0, prob_no_spam = 1.0;
-    dictionary::iterator it2;
-    for (it2 = text.begin(); it2 != text.end(); it2++) {
-        if (!frecs.count(it2->first)) continue;
-        // cout << it2->first << endl;
-        // cout << frecs[it2->first].first << "/" << total_spam << endl;
-        prob_spam *= frecs[it2->first].first / total_spam;
-        // cout << frecs[it2->first].second << "/" << total_no_spam << endl;
-        prob_no_spam *= frecs[it2->first].second / total_no_spam;
+    double prob_spam = log2((double)total_spam / total_no_spam);
+    for (int i = 0; i < (int)text.size(); i++) {
+        if (frecs.count(text[i]) == 0) continue;
+        double pwi_spam = (double)frecs[text[i]].first * total_no_spam;
+        double pwi_no_spam = (double)frecs[text[i]].second * total_spam;
+        prob_spam += log2(pwi_spam / pwi_no_spam);
+        fflush(stdout);
     }
 
-    cout << "Prob Spam: " << prob_spam << " Prob no Spam:" << prob_no_spam << endl;
-
-    return prob_spam > prob_no_spam;
+    if  (prob_spam > 0.0) return true;
+    return false;
 }
 
 
 int main(int argc, char const *argv[]) {
-    if (argc < 4) {
+    if (argc < 3) {
         cout << "Missing Args";
         exit(EXIT_FAILURE);
     }
 
-    frequencyMap frecs;
-    frecs = load_frec_map(argv[2], frecs, true);
-    frecs = load_frec_map(argv[1], frecs, false);
+    frequencyMap frecs = load_ccv_freqs_map(argv[1]);
     frecs = clean_freqs(frecs);
 
-    frequencyMap::iterator it;
-    // for ( it = frecs.begin(); it != frecs.end(); it++) {
-    //     cout << it->first << " " << it->second.first << " " << it->second.second << endl;
-    // }
+    vector<pair<bool, vector<string> > > test = load_ccv_test(argv[2]);
 
-    dictionary text = load_text(argv[3]);
-    // dictionary::iterator it;
-    // for ( it = text.begin(); it != text.end(); it++) {
-    //     cout << it->first << " " << it->second << endl;
-    // }
-
-    if (is_spam(frecs, text)) {
-        cout << "The text is spam" << endl;
-    } else {
-        cout << "The text is not spam" << endl;
+    int spam_spam = 0, spam_no_spam = 0;
+    int no_spam_spam = 0, no_spam_no_spam = 0;
+    for (int i = 0; i < (int)test.size(); i++) {
+        bool sp_cls = is_spam(frecs, test[i].second);
+        if (test[i].first && sp_cls) {
+            spam_spam++;
+        } else if (test[i].first && !sp_cls){
+            spam_no_spam++;
+        } else if (!test[i].first && sp_cls) {
+            no_spam_spam++;
+        } else {
+            no_spam_no_spam++;
+        }
     }
 
-
+    cout << "No. spam classified as spam: " << spam_spam << endl;
+    cout << "No. spam classified as not spam: " << spam_no_spam << endl;
+    cout << "No. not spam classified as spam: " << no_spam_spam << endl;
+    cout << "No. not spam classified as not spam: " << no_spam_no_spam << endl;
 
     return 0;
 }
