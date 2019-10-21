@@ -82,10 +82,13 @@ int main(int argc, char const *argv[]) {
         }
     }
 
-    cout << "No. spam classified as spam: " << spam_spam << endl;
-    cout << "No. spam classified as not spam: " << spam_no_spam << endl;
-    cout << "No. not spam classified as spam: " << no_spam_spam << endl;
-    cout << "No. not spam classified as not spam: " << no_spam_no_spam << endl;
+    cout << "Nunmber of spam classified as spam: " << spam_spam << endl;
+    cout << "Nunmber of spam classified as not spam: " << spam_no_spam << endl;
+    cout << "Nunmber of not spam classified as spam: " << no_spam_spam << endl;
+    cout << "Nunmber of not spam classified as not spam: " << no_spam_no_spam << endl;
+    cout << "Precision: " << (double)spam_spam / (spam_spam + no_spam_spam) << endl;
+    cout << "Recall: " << (double)spam_spam / (spam_spam + spam_no_spam) << endl;
+    cout << "Accuracy: " << (double)(spam_spam + no_spam_no_spam) / (spam_spam + no_spam_no_spam + no_spam_spam + spam_no_spam)<< endl;
 
     return 0;
 }
