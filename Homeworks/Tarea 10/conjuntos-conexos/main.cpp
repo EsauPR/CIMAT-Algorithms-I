@@ -45,7 +45,7 @@ int dfs(vvuc &img, int i, int j) {
         next_i = i + MOVS[k];
         next_j = j + MOVS[k + 1];
         if (!is_valid_position(next_i, next_j, img[0].size(), img.size())) continue;
-        if (img[next_i][next_j] == WHITE) {
+        if (img[next_i][next_j] != VISITED && img[next_i][next_j] != BLACK) {
             npixels += dfs(img, next_i, next_j);
         }
     }
@@ -57,7 +57,7 @@ viii find_components(vvuc &img) {
     viii results;
     for (int i = 0; i < (int)img.size(); i++) {
         for (int j = 0; j < (int)img[0].size(); j++) {
-            if (img[i][j] == WHITE) {
+            if (img[i][j] != VISITED && img[i][j] != BLACK) {
                 results.push_back(make_pair(dfs(img, i, j), make_pair(i, j)));
             }
         }
