@@ -2,12 +2,12 @@
 
 ## Objetivos
 
-- Programar un Clasificador Bayesiano Ingenio para clasificar textos como **spam** o **no spam**.
+- Programar un Clasificador Bayesiano Ingenuo para clasificar textos como **spam** o **no spam**.
 - Programar la detección de componentes conexos en una imagen formato PGM en una imagen a escala de grises con fondo negro.
 
 ## Clasificador Bayesiano Ingenuo de Spam
 
-Dado un conjunto de textos clasificados como spam y no spam se debe construir un clasificador Bayesiano Ingenuo tal que pueda predecir la clase a la que pertenecerán nuevos textos.
+Dado un conjunto de textos etiquetados como spam y no spam se debe construir un clasificador Bayesiano Ingenuo tal que pueda predecir la clase a la que pertenecerán nuevos textos.
 
 La construcción del Clasificador Bayesiano Ingenuo es bajo la premisa que todas las variables aleatorias involucradas sin independientes. Así, dadas $K$ categorías y $x_1, x_2, ..., x_n$ muestras pertenecientes al conjunto de datos a clasificar podemos escribir el modelo de probabilidad dado por:
 $$
@@ -73,18 +73,22 @@ Además se obtuvieron los siguientes medidas de predicción:
 
 ### Conclusiones 
 
-De los resultados anteriores podemos observar que nuestro clasificador acertó en el 92.5% de los casos, dónde solo el 68.96% de los textos clasificados como spam en realidad si eran spam y 85.1% de los textos que son spam fueron clasificados correctamente como spam. A pesar de la simplicidad del método estamos obteniendo buenos resultados al predecir el texto usando solo dos clases, esto podría mejorarse realizando un preprocesamiento más exhaustivo como por ejemplo usar un conjunto de datos de *stop_words* para omitir palabras no relevantes para nuestro entrenamiento como determinantes, pronombres, conjunciones, disyunciones, entre otros.
+A pesar de que a simple vista las muestras de las clases se encuentran bastante desbalanceadas, podemos observar que nuestro clasificador acertó en el 92.5% de los casos, dónde solo el 68.96% de los textos clasificados como spam en realidad si eran spam y 85.1% de los textos que son spam fueron clasificados correctamente como spam. A pesar de la simplicidad del método estamos obteniendo buenos resultados al predecir el texto usando solo dos clases, esto podría mejorarse realizando un preprocesamiento más exhaustivo sobre los datos antes de realizar el entrenamiento como por ejemplo usar un conjunto de datos de *stop_words*, y así omitir palabras no relevantes para nuestro entrenamiento como determinantes, pronombres, conjunciones, disyunciones, entre otros.
 
 ## Detección de Componentes Conexas en una imagen formato PGM
 
 Dada una imagen en escala de grises dónde el fondo es de color negro y cuyos elementos son de color blanco, una forma de identificar cada uno de estos elementos es tratar de verlos y resolver el problema como una grafo con diversos componentes conexos.
 
-De esta manera cada pixel puede ser tratado como un nodo con 8 pixeles vecinos. La idea consiste recorrer la imagen en búsqueda de algún pixel cuyo valor sea distinto de cero puesto que indica que debe pertenecer a algún elemento de la imagen e iniciar algún algoritmo de recorrido ya sea DFS o BFS para visitar a sus 8 vecinos adyacentes repitiendo este procedimiento hasta terminar de recorrer la imagen.
+De esta manera cada pixel puede ser tratado como un nodo con 8 pixeles vecinos. La idea consiste recorrer la imagen en búsqueda de algún pixel cuyo valor sea distinto de cero (lo que indica que este pixel debe pertenecer a algún elemento de la imagen) e iniciar algún algoritmo de recorrido ya sea DFS o BFS para visitar a sus 8 vecinos adyacentes repitiendo este procedimiento hasta terminar de recorrer la imagen.
 
 ### Implementación y resultados
 
-En la implementación se decidió usar el algoritmo de recorrido DFS con una pequeña modificación para realizar el conteo de la cantidad de pixeles que conformar a dicho componente. Una vez obtenidos los componentes se escribe una copia de la imagen original únicamente con le componente más grande y el componente más pequeño.
+En la implementación se decidió usar el algoritmo de recorrido DFS con una pequeña modificación para realizar el conteo de la cantidad de pixeles que conformar a dicho componente. Una vez obtenidos los componentes se escribe una copia de la imagen original únicamente con el componente más grande y el componente más pequeño.
 
 A continuación se muestra la imagen de entrada (izquierda) y la imagen obtenida (derecha) después del procesamiento con el componente más grande y pequeño detectado.
 
-![Screenshot_20191021_172352](/home/esaup/Documentos/CIMAT/Programación y Algoritmos 1/Algorithms-I/Homeworks/Tarea 10/Screenshot_20191021_172352.png)
+![Screenshot_20191021_172352](./Screenshot_20191021_172352.png)
+
+### Conclusiones
+
+Al igual que como se vio en clase, la implementación realizada detecta eficazmente los componentes de las imágenes planteadas, sin embargo cuando los elementos de las imágenes son más complejos, como podría ser que varios objetos pequeños pertenezcan o compartan información para formar un elemento más grande (por ejemplo el bichito de la primer imagen que parece que tiene dos ojos) o uno o más elementos se traslapan no logran ser reconocidos fielmente.
