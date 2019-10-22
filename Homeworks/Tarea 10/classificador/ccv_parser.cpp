@@ -124,7 +124,10 @@ frequencyMap load_ccv_freqs_map(const string file_name) {
     return frecs;
 }
 
-
+/*
+    Returns a vector with theand type (spam or not) for
+    the email and the words to clasified
+*/
 vector<pair<bool, vector<string>> > load_ccv_test(const string file_name) {
     vector<pair<bool, vector<string>> > test;
 
@@ -135,6 +138,7 @@ vector<pair<bool, vector<string>> > load_ccv_test(const string file_name) {
     }
 
     string line, type, word;
+    getline(infile, line); // Jump labels
 
     while (!infile.eof()) {
         getline(infile, line);
