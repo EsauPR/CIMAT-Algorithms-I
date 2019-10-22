@@ -3,11 +3,18 @@
 ## Compilación
 
 ```bash
-$ g++ -Wall main.cpp
+$ g++ -Wall main.cpp ccv_parser.cpp
 ```
 
 ## Ejecución
 
 ```bash
-$ ./a.out [spam_file] [no_spam_file] [text_to_classify]
+$ ./a.out [training_csv_file_path] [test_cvs_file_path]
 ```
+
+Example
+
+```bash
+$ ./a.out spam.csv test.csv
+```
+
