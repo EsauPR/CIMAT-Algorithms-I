@@ -1,24 +1,37 @@
-#include <vector.h>
+#ifndef SELECTION_HPP
+#define SELECTION_HPP
+
+#include <vector>
 
 using namespace std;
+
+#ifdef SELECTION_IMPORT
+    #define EXTERN
+#else
+    #define EXTERN extern
+#endif
 
 class Selection {
     private:
         template <typename Ind>
-        double _h1_function_cost(Ind ind, double from=0.5, double to=10);
+        static double _get_repr(Ind ind, double from=-30, double to=30);
         template <typename Ind>
-        double _h1_function_cost(Ind ind, double from=0.5, double to=10);
-
-    protected:
+        static double _h1_function_cost(Ind ind);
         template <typename Ind>
-        void select_best(vector<Ind> population, int f_cost_t);
+        static double _h2_function_cost(Ind ind);
 
     public:
-        Selection();
-        ~Selection();
         enum {
             _H1,
             _H2
         };
 
+        template <typename Ind>
+        static vector<pair<Ind, double>> select_kbest(vector<Ind> population, unsigned int f_cost_t, unsigned int kbest=10);
+
 };
+
+
+#undef SELECTION_HPP
+#undef EXTERN
+#endif

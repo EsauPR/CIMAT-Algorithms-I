@@ -1,17 +1,33 @@
+#ifndef INDIVIDUAL_HPP
+#define INDIVIDUAL_HPP
+
 #include <vector>
 
 using namespace std;
 
+#ifdef INDIVIDUAL_IMPORT
+    #define EXTERN
+#else
+    #define EXTERN extern
+#endif
+
 class Individual {
     private:
-        vector<bool> genome;
+        vector<bool> _genome;
+
     public:
-        Individual(unsigned int size, bool ramdonize=true);
-        Individual(vector<bool> gnome);
-        Individual(unsigned int size, bool ramdonize=true);
-        ~Individual();
+        Individual();
+        Individual(unsigned int size, bool ramdonize);
+        Individual(vector<bool> genome);
 
         vector<bool> get_genome();
         unsigned int get_size();
+        bool get_at(unsigned int index);
+        void print();
 
 };
+
+
+#undef INDIVIDUAL_HPP
+#undef EXTERN
+#endif
