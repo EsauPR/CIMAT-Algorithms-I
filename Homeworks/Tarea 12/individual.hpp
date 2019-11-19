@@ -1,3 +1,12 @@
+/**
+    C++ standard: c++11
+    individuall.hpp
+    Purpose: Prototype for individual class
+
+    @author Esaú Peralta
+    @email esau.opr@gmail.com
+*/
+
 #ifndef INDIVIDUAL_HPP
 #define INDIVIDUAL_HPP
 

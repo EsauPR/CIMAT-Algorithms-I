@@ -1,3 +1,12 @@
+/**
+    C++ standard: c++11
+    population.hpp
+    Purpose: Prototype for Population class
+
+    @author Esaú Peralta
+    @email esau.opr@gmail.com
+*/
+
 #ifndef POPULATION_HPP
 #define POPULATION_HPP
 

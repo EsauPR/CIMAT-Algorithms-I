@@ -1,3 +1,12 @@
+/**
+    C++ standard: c++11
+    selection.hpp
+    Purpose: Prototype for Selection class
+
+    @author Esaú Peralta
+    @email esau.opr@gmail.com
+*/
+
 #ifndef SELECTION_HPP
 #define SELECTION_HPP
 

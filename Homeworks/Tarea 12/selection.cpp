@@ -1,3 +1,12 @@
+/**
+    C++ standard: c++11
+    selection.cpp
+    Purpose: Implementaion for Selection class
+
+    @author Esaú Peralta
+    @email esau.opr@gmail.com
+*/
+
 #include <iostream>
 #include <cmath>
 #include <algorithm>
@@ -36,7 +45,7 @@ double Selection::_get_repr(Ind ind, double from, double to) {
 template <typename Ind>
 double Selection::_h1_function_cost(Ind ind) {
     double x = Selection::_get_repr(ind, -30, 30);
-    return x * x + 13;
+    return x * x + 13.6;
 }
 
 

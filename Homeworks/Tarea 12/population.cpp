@@ -1,3 +1,12 @@
+/**
+    C++ standard: c++11
+    Population.cpp
+    Purpose: Implementation for individual class
+
+    @author Esaú Peralta
+    @email esau.opr@gmail.com
+*/
+
 #include <algorithm>
 #include "individual.hpp"
 

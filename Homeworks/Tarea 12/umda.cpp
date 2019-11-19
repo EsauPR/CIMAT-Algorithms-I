@@ -1,3 +1,12 @@
+/**
+    C++ standard: c++11
+    UMDA.cpp
+    Purpose: Implementation for UMDA class
+
+    @author Esaú Peralta
+    @email esau.opr@gmail.com
+*/
+
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -17,8 +26,8 @@ template <class Ind>
 vector<int> UMDA<Ind>::_get_frequencies() {
     vector<int> frecs(_population.get_at(0).get_size());
 
-    for (uint i = 0; i < _population.get_size(); i++) {
-        Ind ind = _population.get_at(i);
+    for (uint i = 0; i < _best_inds.size(); i++) {
+        Ind ind = _best_inds[i].first;
         for (int j = 0; j < ind.get_size(); j++) {
             if (ind.get_at(j)) {
                 frecs[j] ++;
@@ -30,11 +39,11 @@ vector<int> UMDA<Ind>::_get_frequencies() {
 }
 
 template<class Ind>
-vector<bool> UMDA<Ind>::generate_genome(vector<int> frecs) {
+vector<bool> UMDA<Ind>::generate_genome(vector<int> frecs, unsigned int kbest) {
     vector<bool> genome(frecs.size(), false);
 
     for (unsigned int i = 0; i < frecs.size(); i++) {
-        if( frecs[i] <= rand() % 100) {
+        if(rand() % 100 <= ((double)frecs[i] / kbest) * 100) {
             genome[i] = true;
         }
     }
@@ -47,11 +56,11 @@ void UMDA<Ind>::run(unsigned int f_cost_t, unsigned int kbest, unsigned int max_
     _population = _population_zero;
 
     while (max_iters--){
+        _best_inds = Selection::select_kbest(_population.get_individuals(), f_cost_t, kbest);
         vector<int> frecs = _get_frequencies();
-        vector<pair<Ind, double>> best_inds = Selection::select_kbest(_population.get_individuals(), f_cost_t, kbest);
 
-        _best_ind = best_inds[0].first;
-        _best_rank = best_inds[0].second;
+        _best_ind = _best_inds[0].first;
+        _best_rank = _best_inds[0].second;
 
         _best_ind.print();
         cout << "Rank: " << _best_rank << endl;
@@ -59,12 +68,12 @@ void UMDA<Ind>::run(unsigned int f_cost_t, unsigned int kbest, unsigned int max_
         Population<Ind> new_population;
 
         for (int i = 0; i < _population_zero.get_size(); i++) {
-            if (i < best_inds.size()) {
-                new_population.add_individual(best_inds[i].first);
+            if (i < _best_inds.size()) {
+                new_population.add_individual(_best_inds[i].first);
                 continue;
             }
 
-            Ind ind(generate_genome(frecs));
+            Ind ind(generate_genome(frecs, kbest));
             new_population.add_individual(ind);
         }
 

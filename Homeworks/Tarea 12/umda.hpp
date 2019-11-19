@@ -1,3 +1,12 @@
+/**
+    C++ standard: c++11
+    umda.hpp
+    Purpose: Prototype for UMDA class
+
+    @author Esaú Peralta
+    @email esau.opr@gmail.com
+*/
+
 #ifndef UMDA_HPP
 #define UMDA_HPP
 
@@ -18,10 +27,11 @@ class UMDA {
     private:
         Population<Ind> _population_zero;
         Population<Ind> _population;
+        vector<pair<Ind, double>> _best_inds;
         Ind _best_ind;
         double _best_rank;
 
-        vector<bool> generate_genome(vector<int> frecs);
+        vector<bool> generate_genome(vector<int> frecs, unsigned int kbest);
         vector<int> _get_frequencies();
 
     public:
