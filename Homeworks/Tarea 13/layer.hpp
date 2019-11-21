@@ -20,9 +20,6 @@ class Layer {
         vector<double> _thresholds;
 
     public:
-        Layer * _prev = NULL;
-        Layer * _next = NULL;
-
         Layer(int layer_size, int n_weights);
         void fit(vector<double> x);
         vector<double> get_thresholds();
