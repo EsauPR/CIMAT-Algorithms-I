@@ -3,4 +3,4 @@ FLAGS=-Wall -g
 CC=g++
 
 build:
-	${CC} ${FLAGS} perceptron.cpp layer.cpp mlp.cpp main.cpp -o main
+	${CC} ${FLAGS} activation.cpp perceptron.cpp layer.cpp mlp.cpp main.cpp -o main
