@@ -7,15 +7,22 @@
 
 using namespace std;
 
-Perceptron::Perceptron(int x_size) {
+
+Perceptron::Perceptron(unsigned int x_size) {
     _size = x_size;
     _weights.resize(x_size);
     _bias = rand() % 100;
 
-    for (int i = 0; i < x_size; i++) {
+    for (unsigned int i = 0; i < x_size; i++) {
         _weights[i] = rand() % 1000;
     }
 }
+
+
+double Perceptron::get_bias() {
+    return _bias;
+}
+
 
 void Perceptron::set_bias(double bias) {
     _bias = bias;
@@ -23,12 +30,13 @@ void Perceptron::set_bias(double bias) {
 
 double Perceptron::threshold_function(vector<double> x) {
     double threshold = 0;
-    for (int i = 0; i < _size; i++) {
+    for (unsigned int i = 0; i < _size; i++) {
         threshold += _weights[i] * x[i];
     }
 
-    return threshold;
+    return threshold + _bias;
 }
+
 
 double Perceptron::threshold_function(vector<double> x, vector<double> w) {
     double threshold = 0;
@@ -36,10 +44,17 @@ double Perceptron::threshold_function(vector<double> x, vector<double> w) {
         threshold += w[i] * x[i];
     }
 
-    return threshold;
+    return threshold + _bias;
 }
 
 
 vector<double> Perceptron::get_weights() {
     return _weights;
+}
+
+
+void Perceptron::update_weights(double factor) {
+    for (unsigned int i = 0; i < _size; i++) {
+        _weights[i] += factor;
+    }
 }

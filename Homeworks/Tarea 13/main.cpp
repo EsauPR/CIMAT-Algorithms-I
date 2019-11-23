@@ -52,7 +52,7 @@ int main(int argc, char * argv[]) {
 
     read_trainingset(argv[1], x_sizes, X, Y);
 
-    int sizes[] = {3, 4, 5, 2, 3};
+    int sizes[] = {3, 4, 2};
     vector<unsigned int> layers_sizes(sizes, sizes + sizeof(sizes) / sizeof(int));
 
     MLP mlp(layers_sizes, x_sizes);

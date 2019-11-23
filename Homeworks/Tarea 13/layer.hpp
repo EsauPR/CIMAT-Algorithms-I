@@ -28,8 +28,11 @@ class Layer {
         vector<double> get_thresholds(vector<double> x, vector<vector<double>> w);
         vector<double> get_output();
         vector<double> get_weights(unsigned int index);
+        vector<vector<double>> get_all_weights();
+        void update_weights(double factor);
         unsigned int get_size();
-        void set_bias(double bias);
+        double get_bias(unsigned int index);
+        void set_bias(double bias, unsigned int index);
 };
 
 #undef LAYER_IMPORT

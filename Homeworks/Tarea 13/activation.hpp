@@ -1,13 +1,15 @@
 #ifndef ACTIVATION_H
 #define ACTIVATION_H
 
-// includes
+#include <vector>
 
 #ifdef ACTIVATION_IMPORT
    #define EXTERN
 #else
     #define EXTERN extern
 #endif
+
+using namespace std;
 
 typedef int activation_function_t;
 

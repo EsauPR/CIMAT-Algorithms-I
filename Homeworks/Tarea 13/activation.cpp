@@ -16,8 +16,8 @@ double Activation::_sigmoid_function(double value) {
 
 
 double Activation::_sigmoid_function_derivate(double value) {
-    double act_value = Activation::_sigmoid_function(value);
-    return act_value *  (1.0 - act_value);
+    // double act_value = Activation::_sigmoid_function(value);
+    return value *  (1.0 - value);
 }
 
 
@@ -30,6 +30,13 @@ double Activation::activate(double value, activation_function_t f) {
     }
 }
 
+vector<double> Activation::activate(vector<double> values, activation_function_t f) {
+    vector<double> acts(values.size());
+    for (unsigned int i = 0; i < values.size(); i++) {
+        acts[i] = Activation::activate(values[i], f);
+    }
+    return acts;
+}
 
 double Activation::activate_derivate(double value, activation_function_t f) {
     switch (f) {
@@ -38,14 +45,6 @@ double Activation::activate_derivate(double value, activation_function_t f) {
         default:
             return 0;
     }
-}
-
-vector<double> Activation::activate(vector<double> values, activation_function_t f) {
-    vector<double> acts(values.size());
-    for (unsigned int i = 0; i < values.size(); i++) {
-        acts[i] = Activation::activate(values[i], f);
-    }
-    return acts;
 }
 
 vector<double> Activation::activate_derivate(vector<double> values, activation_function_t f) {

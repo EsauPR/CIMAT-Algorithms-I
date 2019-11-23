@@ -13,16 +13,18 @@ using namespace std;
 
 class Perceptron {
     private:
-        int _size;
+        unsigned int _size;
         vector<double> _weights;
         double _bias;
 
     public:
-        Perceptron(int x_size);
+        Perceptron(unsigned int x_size);
         double threshold_function(vector<double> x);
-        static double threshold_function(vector<double> x, vector<double> w);
+        double threshold_function(vector<double> x, vector<double> w);
+        double get_bias();
         void set_bias(double bias);
         vector<double> get_weights();
+        void update_weights(double factor);
 };
 
 #undef PERCEPTRON_IMPORT

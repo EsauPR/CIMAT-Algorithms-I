@@ -28,7 +28,7 @@ vector<double> Layer::get_thresholds(vector<double> x, vector<vector<double>> w)
     vector<double> thresholds(_size);
 
     for (unsigned int i = 0; i < _size; i++) {
-        thresholds[i] = Perceptron::threshold_function(x, w[i]);
+        thresholds[i] = _neurons[i].threshold_function(x, w[i]);
     }
 
     return thresholds;
@@ -52,8 +52,26 @@ vector<double> Layer::get_weights(unsigned int index) {
     return _neurons[index].get_weights();
 }
 
-void Layer::set_bias(double bias) {
+vector<vector<double>> Layer::get_all_weights() {
+    vector<vector<double>> weights(_size);
     for (unsigned int i = 0; i < _size; i++) {
-        _neurons[i].set_bias(bias);
+        weights[i] = get_weights(i);
+    }
+    return weights;
+}
+
+
+double Layer::get_bias(unsigned int index) {
+    return _neurons[index].get_bias();
+}
+
+void Layer::set_bias(double bias, unsigned int index) {
+    _neurons[index].set_bias(bias);
+}
+
+
+void Layer::update_weights(double factor) {
+    for (unsigned int i = 0; i < _size; i++) {
+        _neurons[i].update_weights(factor);
     }
 }
