@@ -42,7 +42,7 @@ void MLP::_back_propagation(vector<double> x, vector<double> y) {
     vector<double> last_deltas_l;
 
     double cost = F_Cost::evaluate(_layers[_layers.size() - 1].get_output(), y, _f_cost);
-    cout << "Cost :" << cost << endl;
+    cout << "Error: " << cost << endl;
 
     for (int i = _size - 1; i >= 0; i--) {
         // Compute deltas
@@ -58,7 +58,7 @@ void MLP::_back_propagation(vector<double> x, vector<double> y) {
             vector<double> act_der = Activation::activate_derivate(_layers[i].get_output(), _f_act);
             vector<double> deltas_l(last_Weights[0].size(), 0.0);
             for (unsigned int k = 0; k < last_deltas_l.size(); k++) {
-                for (unsigned int j = 0; j < last_Weights[i].size(); j++) {
+                for (unsigned int j = 0; j < last_Weights[k].size(); j++) {
                     deltas_l[j] += last_deltas_l[k]*last_Weights[k][j];
                 }
             }
@@ -88,9 +88,9 @@ void MLP::_back_propagation(vector<double> x, vector<double> y) {
 }
 
 
-void MLP::train(vector<SAMPLE> X, SAMPLE Y) {
+void MLP::train(vector<SAMPLE> X, vector<SAMPLE> Y) {
     for (unsigned int i = 0; i < X.size(); i++) {
         _propagation(X[i]);
-        _back_propagation(X[i], Y);
+        _back_propagation(X[i], Y[i]);
     }
 }

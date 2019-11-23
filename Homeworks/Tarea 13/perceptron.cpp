@@ -11,10 +11,10 @@ using namespace std;
 Perceptron::Perceptron(unsigned int x_size) {
     _size = x_size;
     _weights.resize(x_size);
-    _bias = rand() % 100;
+    _bias = (double)(rand() % 100) / 100.0;
 
     for (unsigned int i = 0; i < x_size; i++) {
-        _weights[i] = rand() % 1000;
+        _weights[i] = (double)(rand() % 100) / 100.0;
     }
 }
 

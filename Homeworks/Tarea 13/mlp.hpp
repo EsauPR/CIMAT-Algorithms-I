@@ -32,7 +32,7 @@ class MLP {
 
     public:
         MLP(vector<unsigned int> layers_sizes, unsigned int x_size);
-        void train(vector<SAMPLE> X, SAMPLE Y);
+        void train(vector<SAMPLE> X, vector<SAMPLE> Y);
         void set_config(activation_function_t f_act,
                         cost_function_t f_cost,
                         double learning_rate=0.5);

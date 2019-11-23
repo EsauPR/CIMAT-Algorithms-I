@@ -6,7 +6,7 @@
 using namespace std;
 
 
-void read_trainingset(const string file_name, unsigned int x_size, vector<SAMPLE> &X, SAMPLE &Y) {
+void read_trainingset(const string file_name, unsigned int x_size, vector<SAMPLE> &X, vector<SAMPLE> &Y) {
     ifstream input(file_name);
     if (!input.is_open()) {
         cout << "File " << file_name << " not found" << endl;
@@ -33,9 +33,10 @@ void read_trainingset(const string file_name, unsigned int x_size, vector<SAMPLE
             sample.push_back(value);
         }
         ss >> y;
+        vector<double> ys(1, y);
 
         X.push_back(sample);
-        Y.push_back(y);
+        Y.push_back(ys);
     }
 }
 
@@ -48,13 +49,11 @@ int main(int argc, char * argv[]) {
 
     int x_sizes = 4;
     vector<SAMPLE> X;
-    SAMPLE Y;
+    vector<SAMPLE> Y;
 
     read_trainingset(argv[1], x_sizes, X, Y);
 
-    int sizes[] = {3, 4, 2};
-    vector<unsigned int> layers_sizes(sizes, sizes + sizeof(sizes) / sizeof(int));
-
+    vector<unsigned int> layers_sizes = {8, 16, 1};
     MLP mlp(layers_sizes, x_sizes);
     mlp.train(X, Y);
 

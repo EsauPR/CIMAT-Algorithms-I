@@ -12,13 +12,11 @@ Activation::Activation() {}
 
 
 double Activation::_sigmoid_function(double value) {
-    cout << "activation " << value << " " << (1.0 / (1.0 + exp(-value))) << endl;
     return 1.0 / (1.0 + exp(-value));
 }
 
 
 double Activation::_sigmoid_function_derivate(double value) {
-    // double act_value = Activation::_sigmoid_function(value);
     return value *  (1.0 - value);
 }
 
