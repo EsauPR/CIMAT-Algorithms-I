@@ -2,12 +2,12 @@
 #include <iostream>
 #include <vector>
 #include <numeric>
+#include <algorithm>
 
 #define MLP_IMPORT
 #include "mlp.hpp"
 
 using namespace std;
-
 
 MLP::MLP(vector<unsigned int> layers_sizes, unsigned int x_size) {
     srand(0);
@@ -36,62 +36,61 @@ void MLP::_propagation(vector<double> x) {
     }
 }
 
-
-vector<double> MLP::_get_deltas_layer(double d_cost, vector<double> d_act) {
-    vector<double> deltas(d_act.size());
-    for (unsigned i = 0; i < d_act.size(); i++) {
-        deltas[i] = d_cost * d_act[i];
-    }
-    return deltas;
-}
-
-void MLP::_back_propagation(vector<double> y) {
+void MLP::_back_propagation(vector<double> x, vector<double> y) {
     vector<vector<double>> deltas;
-    vector<vector<double>> last_Ws;
+    vector<vector<double>> last_Weights;
+    vector<double> last_deltas_l;
 
     double cost = F_Cost::evaluate(_layers[_layers.size() - 1].get_output(), y, _f_cost);
     cout << "Cost :" << cost << endl;
 
-    for (unsigned int  i = _size - 1; i >= 0; i--) {
-        Layer layer = _layers[i];
+    for (int i = _size - 1; i >= 0; i--) {
         // Compute deltas
-        if (i == _size - 1) { // Last layer
-            double cost_der = F_Cost::evaluate_derivate(layer.get_output(), y, _f_cost);
-            vector<double> act_der = Activation::activate_derivate(layer.get_output(), _f_act);
-            deltas.push_back(_get_deltas_layer(cost_der, act_der));
-        } else { // First and hidden layers
-            vector<double> thresholds = _layers[i+1].get_thresholds(deltas[deltas.size() - 1], last_Ws);
-            vector<double> act_der = Activation::activate_derivate(layer.get_output(), _f_act);
-            vector<double> deltas_layer;
-            for (unsigned int i = 0; i < act_der.size(); i++){
-                deltas_layer.push_back(thresholds[i]*act_der[i]);
+        if (i == (int)_size - 1) { // Last layer
+            double cost_der = F_Cost::evaluate_derivate(_layers[i].get_output(), y, _f_cost);
+            vector<double> deltas_l = Activation::activate_derivate(_layers[i].get_output(), _f_act);
+            for (unsigned int j = 0; j < deltas_l.size(); j++) {
+                deltas_l[j] *= cost_der;
             }
-            deltas.push_back(deltas_layer);
+            deltas.push_back(deltas_l);
+            last_deltas_l = deltas_l;
+        } else { // First and hidden layers
+            vector<double> act_der = Activation::activate_derivate(_layers[i].get_output(), _f_act);
+            vector<double> deltas_l(last_Weights[0].size(), 0.0);
+            for (unsigned int k = 0; k < last_deltas_l.size(); k++) {
+                for (unsigned int j = 0; j < last_Weights[i].size(); j++) {
+                    deltas_l[j] += last_deltas_l[k]*last_Weights[k][j];
+                }
+            }
+            for (unsigned int k = 0; k < deltas_l.size(); k++) {
+                deltas_l[k] *= act_der[k];
+            }
+            deltas.push_back(deltas_l);
+            last_deltas_l = deltas_l;
         }
 
-        last_Ws.clear();
-        last_Ws = layer.get_all_weights();
+        last_Weights = _layers[i].get_all_weights();
 
         // Gradient descent
         // Update bias
-        double mean = accumulate(deltas[deltas.size()-1].begin(), deltas[deltas.size()-1].end(), 0.0) / deltas.size();
-        for (unsigned int j = 0; j < layer.get_size(); j++) {
-            layer.set_bias(layer.get_bias(i) - mean * _learning_rate, i);
+        double mean = accumulate(last_deltas_l.begin(), last_deltas_l.end(), 0.0) / last_deltas_l.size();
+        for (unsigned int j = 0; j < _layers[i].get_size(); j++) {
+            _layers[i].set_bias(_layers[i].get_bias(j) - mean * _learning_rate, j);
         }
         // Update weights
-        vector<double> next_W = _layers[i+1].get_output();
-        vector<double> c_deltas = deltas[deltas.size()-1];
-        double swl = inner_product(next_W.begin(),
-                                  next_W.end(),
-                                  deltas[deltas.size()-1].begin(), 0.0) * _learning_rate;
-        layer.update_weights(-swl);
+        vector<double> prev_act = (i==0)?  x : _layers[i-1].get_output();
+        for (unsigned int  k = 0; k < last_deltas_l.size(); k++) {
+            for (unsigned int j = 0; j < prev_act.size(); j++){
+                _layers[i].update_weight(-last_deltas_l[k]*prev_act[j] * _learning_rate, k, j);
+            }
+        }
     }
 }
 
 
 void MLP::train(vector<SAMPLE> X, SAMPLE Y) {
-    for (unsigned int i = 0; i < _size; i++) {
+    for (unsigned int i = 0; i < X.size(); i++) {
         _propagation(X[i]);
-        _back_propagation(Y);
+        _back_propagation(X[i], Y);
     }
 }

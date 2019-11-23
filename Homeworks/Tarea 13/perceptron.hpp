@@ -24,7 +24,7 @@ class Perceptron {
         double get_bias();
         void set_bias(double bias);
         vector<double> get_weights();
-        void update_weights(double factor);
+        void update_weight(double factor, unsigned int index);
 };
 
 #undef PERCEPTRON_IMPORT

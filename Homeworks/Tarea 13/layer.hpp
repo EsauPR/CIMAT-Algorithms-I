@@ -29,7 +29,7 @@ class Layer {
         vector<double> get_output();
         vector<double> get_weights(unsigned int index);
         vector<vector<double>> get_all_weights();
-        void update_weights(double factor);
+        void update_weight(double factor, unsigned int n_index, unsigned int w_index);
         unsigned int get_size();
         double get_bias(unsigned int index);
         void set_bias(double bias, unsigned int index);

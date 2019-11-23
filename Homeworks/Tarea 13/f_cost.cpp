@@ -13,7 +13,7 @@ double F_Cost::_ecm_function(vector<double>y_est, vector<double> y_real) {
         cost += (y_est[i] - y_real[i]) * (y_est[i] - y_real[i]);
     }
 
-    return cost / 2.0;
+    return cost;
 }
 
 

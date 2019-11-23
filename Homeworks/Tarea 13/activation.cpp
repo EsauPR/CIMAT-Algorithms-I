@@ -1,5 +1,6 @@
 #include <cmath>
 #include <vector>
+#include <iostream>
 
 #define ACTIVATION_IMPORT
 #include "activation.hpp"
@@ -11,6 +12,7 @@ Activation::Activation() {}
 
 
 double Activation::_sigmoid_function(double value) {
+    cout << "activation " << value << " " << (1.0 / (1.0 + exp(-value))) << endl;
     return 1.0 / (1.0 + exp(-value));
 }
 

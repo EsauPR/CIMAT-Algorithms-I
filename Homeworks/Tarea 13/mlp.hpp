@@ -28,7 +28,7 @@ class MLP {
 
 
         void _propagation(vector<double> x);
-        void _back_propagation(vector<double> y);
+        void _back_propagation(vector<double> x, vector<double> y);
 
     public:
         MLP(vector<unsigned int> layers_sizes, unsigned int x_size);
