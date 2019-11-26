@@ -73,3 +73,7 @@ void Layer::set_bias(double bias, unsigned int index) {
 void Layer::update_weight(double factor, unsigned int n_index, unsigned int w_index) {
     _neurons[n_index].update_weight(factor, w_index);
 }
+
+void Layer::set_weight(double value, unsigned int n_index, unsigned int w_index) {
+    _neurons[n_index].set_weight(value, w_index);
+}

@@ -2,6 +2,8 @@
 
 Oscar Esaú Peralta Rosales
 
+
+
 ## Objetivo
 
 - Programar Arquitectura de *RNM* genérica.
@@ -20,7 +22,7 @@ El aprendizaje de las Redes Neuronales se realiza a mediante una función de cos
 
 Una red está puede estar formada por múltiples capas, donde tiene 1 o más neuronas asociadas.
 
-![img](/home/esaup/Documentos/CIMAT/Programación y Algoritmos 1/Algorithms-I/Homeworks/Tarea 13/1_wyfWWJWKn0BgQSbNXVa67Q-1574725234541.png)
+![img](1_wyfWWJWKn0BgQSbNXVa67Q.png)
 
 ### Perceptrón
 
@@ -103,11 +105,66 @@ y cuya derivada es
 $$
 sigmoid'(x) = sigmoid(x) * (1 - sigmoid(x))
 $$
-Cómo función de costo se uso la el Error Cuadrático Medio
+Cómo función de costo se usó la el Error Cuadrático Medio
 $$
 ECM = \sum_{i=1}^n (\hat y_i - y_i)^2
 $$
 
+Se realizaron pruebas con las siguientes arquitecturas de la red
+
+
+
+**Caso 1**
+
+```
+Network architecture:
+Activation function: Sigmoid
+Cost function: ECM
+Learning rate: 0.1
+Input size: 4
+Layers: 5
+Layer 1, No. Neurons: 8
+Layer 2, No. Neurons: 16
+Layer 3, No. Neurons: 8
+Layer 4, No. Neurons: 3
+Layer 5, No. Neurons: 1
+
+Last Error: 0.00697571
+```
+
+![image-20191125223041487](../../../../../../../../.config/Typora/typora-user-images/image-20191125223041487.png)
+
+
+
+**Caso 2**
+
+```
+Network architecture:
+Activation function: Sigmoid
+Cost function: ECM
+Learning rate: 0.1
+Input size: 4
+Layers: 3
+Layer 1, No. Neurons: 8
+Layer 2, No. Neurons: 16
+Layer 3, No. Neurons: 1
+
+Last Error: 3.32861e-07
+```
+
+![image-20191125223312476](../../../../../../../../.config/Typora/typora-user-images/image-20191125223312476.png)
+
+La validación se realizo con 20 datos de los 100 disponibles, los 80 datos restantes fueron ocupados para el entrenamiento, 
+
+En ambos casos se alcanzó un acertividad del 55%.
+
+
 
 ## Conclusiones
+
+La implementación de la red neuronal usando la Metodología Orientada a Objetos ayuda a estructurar y reutilizar mucho código, además de que la lectura de este se vuelve más simple y fácil de seguir. 
+
+Además se identificó que para estos datos, mientras más capas ocultas son agregadas el error de la función de coste no decrece tanto. Los mejores valores se obtuvieron jugando con una configuración que conste de una sola capa oculta.
+
+Por otro durante las pruebas la funcionalidad del algoritmo no fue como se esperaba, puesto que estas mismas me indicaban que gran parte de los datos eran mapeados en su mayoría a 1 a pesar que se alcanzo un error durante el proceso de backprogation de 3.32861e-07. Por tanto se intentó identificar algún error sin lograr encontrar una causa a cuál atribuirle este comportamiento.
 

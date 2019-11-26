@@ -23,6 +23,7 @@ class Perceptron {
         double threshold_function(vector<double> x, vector<double> w);
         double get_bias();
         void set_bias(double bias);
+        void set_weight(double value, int index);
         vector<double> get_weights();
         void update_weight(double factor, unsigned int index);
 };
