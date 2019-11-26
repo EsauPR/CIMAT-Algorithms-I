@@ -11,9 +11,16 @@ $ make
 
 ## Ejecución
 
-Recibe como primer argumento al archivo con los datos previsto
+### Entrenamiento
 
 Ejemplo
 ```
-$ ./main data.dat
+$ ./main -train data_train.dat
+```
+
+### Test
+
+Ejemplo
+```
+$ ./main -test data_test.dat
 ```

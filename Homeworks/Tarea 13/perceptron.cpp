@@ -56,3 +56,7 @@ vector<double> Perceptron::get_weights() {
 void Perceptron::update_weight(double factor, unsigned int index) {
     _weights[index] += factor;
 }
+
+void Perceptron::set_weight(double value, int index) {
+    _weights[index] = value;
+}
