@@ -9,12 +9,15 @@
 
 using namespace std;
 
+
 MLP::MLP(vector<unsigned int> layers_sizes, unsigned int x_size) {
+    // srand(time( NULL ));
     srand(0);
     _size = layers_sizes.size();
     _f_act = Activation::SIGMOID;
     _f_cost = F_Cost::ECM;
     _learning_rate = 0.01;
+    _layers_config = layers_sizes;
 
     for (unsigned int i = 0; i < _size; i++) {
         Layer layer(layers_sizes[i], (i == 0)? x_size : layers_sizes[i-1]);
@@ -35,6 +38,7 @@ void MLP::_propagation(vector<double> x) {
         _layers[i].fit((i==0)? x : _layers[i-1].get_output(), _f_act);
     }
 }
+
 
 void MLP::_back_propagation(vector<double> x, vector<double> y) {
     vector<vector<double>> deltas;
@@ -93,4 +97,16 @@ void MLP::train(vector<SAMPLE> X, vector<SAMPLE> Y) {
         _propagation(X[i]);
         _back_propagation(X[i], Y[i]);
     }
+}
+
+void MLP::get_config() {
+    cout << "\nNetwork architecture:" << endl;
+    Activation::get_info(_f_act);
+    F_Cost::get_info(_f_cost);
+    cout << "Learning rate: " << _learning_rate << endl;
+    cout << "Layers: " << _layers_config.size() << endl;
+    for (unsigned int i = 0; i < _layers_config.size(); i++) {
+        cout << "Layer " << i+1 << ", No. Neurons: " << _layers_config[i] << endl;
+    }
+    cout << endl;
 }

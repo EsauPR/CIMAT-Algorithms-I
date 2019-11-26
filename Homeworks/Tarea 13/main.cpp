@@ -42,7 +42,7 @@ void read_trainingset(const string file_name, unsigned int x_size, vector<SAMPLE
 
 
 int main(int argc, char * argv[]) {
-    if (argc < 2) {
+    if (argc < 1) {
         cout << "Missing args: [training_set file name]" << endl;
         exit(EXIT_FAILURE);
     }
@@ -50,11 +50,12 @@ int main(int argc, char * argv[]) {
     int x_sizes = 4;
     vector<SAMPLE> X;
     vector<SAMPLE> Y;
-
     read_trainingset(argv[1], x_sizes, X, Y);
 
     vector<unsigned int> layers_sizes = {8, 16, 1};
     MLP mlp(layers_sizes, x_sizes);
+    mlp.set_config(Activation::SIGMOID, F_Cost::ECM, 0.01);
+    mlp.get_config();
     mlp.train(X, Y);
 
     return 0;

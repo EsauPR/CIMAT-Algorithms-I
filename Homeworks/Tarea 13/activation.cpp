@@ -54,3 +54,14 @@ vector<double> Activation::activate_derivate(vector<double> values, activation_f
     }
     return acts;
 }
+
+
+void Activation::get_info(activation_function_t f) {
+    switch (f) {
+        case SIGMOID:
+            cout << "Activation function: Sigmoid" << endl;
+            break;
+        default:
+            break;
+    }
+}

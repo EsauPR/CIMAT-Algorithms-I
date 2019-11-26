@@ -28,6 +28,7 @@ class Activation {
         static double activate_derivate(double value, activation_function_t f);
         static vector<double> activate(vector<double> values, activation_function_t f);
         static vector<double> activate_derivate(vector<double> values, activation_function_t f);
+        static void get_info(activation_function_t f);
 };
 
 #undef ACTIVATION_IMPORT

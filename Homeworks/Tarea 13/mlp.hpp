@@ -25,6 +25,7 @@ class MLP {
         activation_function_t _f_act;
         cost_function_t _f_cost;
         double _learning_rate;
+        vector<unsigned int> _layers_config;
 
 
         void _propagation(vector<double> x);
@@ -37,6 +38,7 @@ class MLP {
                         cost_function_t f_cost,
                         double learning_rate=0.5);
         vector<double> _get_deltas_layer(double d_cost, vector<double> d_act);
+        void get_config();
 };
 
 

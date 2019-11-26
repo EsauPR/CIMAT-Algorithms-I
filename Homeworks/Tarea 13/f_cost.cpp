@@ -1,4 +1,5 @@
 #include <cmath>
+#include <iostream>
 
 #define F_COST_IMPORT
 #include "f_cost.hpp"
@@ -44,5 +45,15 @@ double F_Cost::evaluate_derivate(vector<double>y_est, vector<double> y_real, cos
             return F_Cost::_ecm_function_derivate(y_est, y_real);
         default:
             return 0;
+    }
+}
+
+void F_Cost::get_info(cost_function_t f) {
+    switch (f) {
+        case ECM:
+            cout << "Cost function: ECM" << endl;
+            break;
+        default:
+            break;
     }
 }

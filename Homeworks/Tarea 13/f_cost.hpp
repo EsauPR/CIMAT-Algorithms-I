@@ -25,6 +25,7 @@ class F_Cost {
         } cost_f_t;
         static double evaluate(vector<double>X, vector<double> Y, cost_function_t f);
         static double evaluate_derivate(vector<double>X, vector<double> Y, cost_function_t f);
+        static void get_info(cost_function_t f);
 };
 
 
