@@ -33,8 +33,16 @@ int main(int argc, char * argv[]) {
     }
 
     vector<Point> points = read_points(argv[1]);
-    ConvexHull::_print(points);
-    vector<Point> result_points = ConvexHull::jarvis_march(points);
+    // ConvexHull::_print(points);
+
+    cout << "Jarvis's march";
+    vector<Point> result_points = ConvexHull::jarvis_march(points, false);
+    ConvexHull::_print(result_points);
+
+
+
+    cout << "Andrew's Monotone Chain";
+    result_points = ConvexHull::andrew_monotone_chain(points, false);
     ConvexHull::_print(result_points);
 
     return 0;

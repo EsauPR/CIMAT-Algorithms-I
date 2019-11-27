@@ -13,7 +13,7 @@ class Point {
     private:
         double _x, _y;
     public:
-        Point(double x, double y);
+        Point(double x=0, double y=0);
 
         double get_x();
         double get_y();

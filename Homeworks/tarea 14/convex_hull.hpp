@@ -15,16 +15,17 @@ using namespace std;
 class ConvexHull {
     private:
         ConvexHull();
+        static double _cross(Point a, Point b, Point c);
+        static double _distance(Point a, Point b);
+        static bool _compare(Point a, Point b);
 
     public:
         ~ConvexHull();
-        static double _cross(Point a, Point b, Point c);
-        static double _distance(Point a, Point b);
         static void _print(vector<Point> points);
 
-        static vector<Point> jarvis_march(vector<Point> points);
-        static vector<Point> graham_scan(vector<Point> points);
-        static vector<Point> andrew_monotone_chain(vector<Point> points);
+        static vector<Point> jarvis_march(vector<Point> points, bool collinears=true);
+        static vector<Point> graham_scan(vector<Point> points, bool collinears=true);
+        static vector<Point> andrew_monotone_chain(vector<Point> points, bool collinears=true);
 };
 
 
