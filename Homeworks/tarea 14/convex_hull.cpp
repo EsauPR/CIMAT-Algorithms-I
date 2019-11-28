@@ -25,7 +25,6 @@ void ConvexHull::_print(vector<Point> points) {
 
 /* Returns the value for make the crooss product for vectors ab ac */
 double ConvexHull::_cross(Point a, Point b, Point c) {
-    // return (a.get_y() - c.get_y()) * (a.get_x() - b.get_x()) - (a.get_y() - b.get_y()) * (a.get_x() - c.get_x());
     return (b.get_x() - a.get_x()) * (c.get_y() - a.get_y()) - (b.get_y() - a.get_y()) * (c.get_x() - a.get_x());
 }
 
