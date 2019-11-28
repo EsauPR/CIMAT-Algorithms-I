@@ -12,12 +12,16 @@
 
 using namespace std;
 
+
 class ConvexHull {
     private:
+        static Point _pivot;
+
         ConvexHull();
         static double _cross(Point a, Point b, Point c);
         static double _distance(Point a, Point b);
         static bool _compare(Point a, Point b);
+        static bool _compare_angle(Point a, Point b);
 
     public:
         ~ConvexHull();

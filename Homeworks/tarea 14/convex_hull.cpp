@@ -1,11 +1,16 @@
 #include <iostream>
 #include <algorithm>
 #include <set>
+#include <cmath>
 
 #define CONVEX_HULL_IMPORT
 #include "convex_hull.hpp"
 
 using namespace std;
+
+/* Init pivot */
+Point ConvexHull::_pivot = Point(0 ,0);
+
 
 /* Print a vector */
 void ConvexHull::_print(vector<Point> points) {
@@ -30,9 +35,22 @@ double ConvexHull::_distance(Point a, Point b) {
 }
 
 
-/* compare function between two points downmost and lefmost */
+/* Compare function between two points lowest and lefmost */
 bool ConvexHull::_compare(Point a, Point b) {
     return a.get_y() < b.get_y() || (a.get_y() == b.get_y() && a.get_x() < b.get_x());
+}
+
+
+/* Compara the angle for two points by the lowest angle*/
+bool ConvexHull::_compare_angle(Point a, Point b) {
+    if (_cross(_pivot, a, b) == 0.0) {
+        return _distance(_pivot, a) < _distance(_pivot, b);
+    }
+
+    double d1x = a.get_x() - _pivot.get_x(), d1y = a.get_y() - _pivot.get_y();
+    double d2x = b.get_x() - _pivot.get_x(), d2y = b.get_y() - _pivot.get_y();
+
+    return (atan2(d1y, d1x) - atan2(d2y, d2x)) < 0;
 }
 
 
@@ -59,7 +77,7 @@ vector<Point> ConvexHull::jarvis_march(vector<Point> points, bool collinears) {
         uint next_target = 0;
         for (uint i = 1; i < points.size(); i++) {
             if (i == current) continue;
-            double cross_value = ConvexHull::_cross(points[current], points[next_target], points[i]);
+            double cross_value = _cross(points[current], points[next_target], points[i]);
             if (cross_value > 0) { // points[i] is on left of current
                 next_target = i; // Take as new target point
                 collinear_points.clear();
@@ -96,18 +114,48 @@ vector<Point> ConvexHull::jarvis_march(vector<Point> points, bool collinears) {
     }
 
     // Return a vector with the points
-    vector<Point> result_points;
+    vector<Point> hull;
     for (uint i = 0; i < result.size(); i++) {
-        result_points.push_back(points[result[i]]);
+        hull.push_back(points[result[i]]);
     }
 
-    return result_points;
+    return hull;
 }
 
 
 /* Graham Scan's Algorithm */
 vector<Point> ConvexHull::graham_scan(vector<Point> points, bool collinears) {
+    uint size = points.size();
+    // Get the point whit lowest Y and rigthmost X
+    uint start = 0;
+    for (uint i = 1; i < size; i++) {
+        if (_compare(points[i], points[start])) {
+            start = i;
+        }
+    }
+    // Set pivot and set points[0] to points[start]
+    _pivot = points[0];
+    points[0] = points[start];
+    points[start] = _pivot;
+    // Sort the points around the pivot
+    sort(++points.begin(), points.end(), _compare);
+    vector<Point> hull;
 
+    // Set the 3 first points
+    hull.push_back(points[size-1]);
+    hull.push_back(points[0]);
+    hull.push_back(points[1]);
+
+    for (uint i = 0; i < size; ) {
+        uint j = hull.size() - 1;
+        if (_cross(hull[j-1], hull[j], points[i])) {
+            hull.push_back(points[i++]);
+        } else {
+            hull.pop_back();
+        }
+    }
+
+    return hull;
 }
 
 
@@ -116,36 +164,36 @@ vector<Point> ConvexHull::andrew_monotone_chain(vector<Point> points, bool colli
     sort(points.begin(),points.end(), ConvexHull::_compare);
 	int n = points.size(), k=0;
 
-    vector<Point> result(2 * n);
+    vector<Point> hull(2 * n);
 
     // Build the upper side
 	for(int i=0; i<n; i++) {
         if (collinears) {
-            while(k >= 2 && ConvexHull::_cross(result[k-2], result[k-1], points[i]) < 0) {
+            while(k >= 2 && _cross(hull[k-2], hull[k-1], points[i]) < 0) {
                 k--;
             }
         } else {
-            while(k >= 2 && ConvexHull::_cross(result[k-2], result[k-1], points[i]) <= 0) {
+            while(k >= 2 && _cross(hull[k-2], hull[k-1], points[i]) <= 0) {
                 k--;
             }
         }
-		result[k++] = points[i];
+		hull[k++] = points[i];
 	}
     // Build the lower side
     for(int i=n-2, t=k+1;i>=0; i--) {
         if (collinears) {
-            while(k>=t && ConvexHull::_cross(result[k-2], result[k-1], points[i]) < 0) {
+            while(k>=t && _cross(hull[k-2], hull[k-1], points[i]) < 0) {
                 k--;
             }
         } else {
-            while(k>=t && ConvexHull::_cross(result[k-2], result[k-1], points[i]) <= 0) {
+            while(k>=t && _cross(hull[k-2], hull[k-1], points[i]) <= 0) {
                 k--;
             }
         }
-		result[k++] = points[i];
+		hull[k++] = points[i];
 	}
 
-    result.resize(k-1);
+    hull.resize(k-1);
 
-    return result;
+    return hull;
 }
