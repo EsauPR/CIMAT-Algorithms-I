@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <set>
 #include <cmath>
+#include "draw.hpp"
 
 #define CONVEX_HULL_IMPORT
 #include "convex_hull.hpp"
@@ -196,4 +197,10 @@ vector<Point> ConvexHull::andrew_monotone_chain(vector<Point> points, bool colli
     hull.resize(k-1);
 
     return hull;
+}
+
+
+void ConvexHull::draw(vector<Point> points, vector<Point> hull, double scalling_factor) {
+    Draw draw(1024, 768);
+    draw.draw_points(points, hull, scalling_factor, "output.png");
 }

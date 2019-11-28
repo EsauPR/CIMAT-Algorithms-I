@@ -3,4 +3,4 @@ FLAGS=-Wall -g
 CC=g++
 
 build:
-	${CC} ${FLAGS} point.cpp convex_hull.cpp main.cpp -o main
+	${CC} ${FLAGS} draw.cpp point.cpp convex_hull.cpp main.cpp -o main $(shell pkg-config --cflags --libs cairo)

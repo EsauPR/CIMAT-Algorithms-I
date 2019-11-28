@@ -26,6 +26,7 @@ class ConvexHull {
     public:
         ~ConvexHull();
         static void _print(vector<Point> points);
+        static void draw(vector<Point> points, vector<Point> hull, double scalling_factor=1.0);
 
         static vector<Point> jarvis_march(vector<Point> points, bool collinears=true);
         static vector<Point> graham_scan(vector<Point> points, bool collinears=true);

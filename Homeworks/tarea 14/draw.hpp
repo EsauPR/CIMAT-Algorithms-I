@@ -23,7 +23,8 @@ class Draw {
 
     public:
         Draw(int width, int height);
-        void draw_points(vector<Point> points, string file_ouput);
+        ~Draw();
+        void draw_points(vector<Point> points, vector<Point> hull, double scalling_factor=1.0, string file_ouput="output.png");
 };
 
 

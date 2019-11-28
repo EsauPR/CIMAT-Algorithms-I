@@ -47,5 +47,7 @@ int main(int argc, char * argv[]) {
     result_points = ConvexHull::andrew_monotone_chain(points, false);
     ConvexHull::_print(result_points);
 
+    ConvexHull::draw(points, result_points, 2.0);
+
     return 0;
 }
