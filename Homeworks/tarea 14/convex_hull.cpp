@@ -148,7 +148,7 @@ vector<Point> ConvexHull::graham_scan(vector<Point> points, bool collinears) {
 
     for (uint i = 0; i < size; ) {
         uint j = hull.size() - 1;
-        if (_cross(hull[j-1], hull[j], points[i])) {
+        if (_cross(hull[j-1], hull[j], points[i]) > 0) {
             hull.push_back(points[i++]);
         } else {
             hull.pop_back();

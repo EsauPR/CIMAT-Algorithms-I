@@ -46,6 +46,18 @@ vector<Point> read_image(const char * file_name) {
     return points;
 }
 
+/* Returns a ramdon points */
+vector<Point> get_ramdom_points(uint n) {
+    vector<Point> points;
+
+    for (uint i = 0; i < n; i++) {
+        Point p( 10 + random() % 300, 10 + random() % 300 );
+        points.push_back(p);
+    }
+
+    return points;
+}
+
 
 int main(int argc, char * argv[]) {
     if (argc < 2) {
@@ -60,8 +72,11 @@ int main(int argc, char * argv[]) {
         points = read_points(argv[2]);
     } else if (option == "-i") {
         points = read_image(argv[2]);
+    } else if (option == "-r") {
+        points = get_ramdom_points(atoi(argv[2]));
     } else {
-        cout << "Invalid option" << endl;
+        cout << "Invalid option: " << option << endl;
+        return 0;
     }
 
     unsigned t_start, t_end;
@@ -77,7 +92,7 @@ int main(int argc, char * argv[]) {
 
     cout << "Graham's Scan" << endl;
     t_start=clock();
-    result_points = ConvexHull::andrew_monotone_chain(points, false);
+    result_points = ConvexHull::graham_scan(points, false);
     t_end = clock();
     time = (double(t_end - t_start) / CLOCKS_PER_SEC);
     cout << "Time: " << time << endl;
