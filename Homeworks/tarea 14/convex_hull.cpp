@@ -158,10 +158,7 @@ vector<Point> ConvexHull::graham_scan(vector<Point> points, bool collinears) {
 
     for (uint i = 2; i <= size; ) {
         uint j = hull.size() - 1;
-        // cout << "taked " << hull[j-1].get_x() << " " << hull[j-1].get_y() << ", " << hull[j].get_x() << " " << hull[j].get_y() << ", " << points[i%size].get_x() << " " << points[i%size].get_y() << endl;
-        // cout << j-1 << " " << j << " " << i%size << endl;
         double cross = _cross(hull[j-1], hull[j], points[i % size]);
-        // cout << cross << endl;
         if (collinears && cross >= 0) {
             hull.push_back(points[i%size]);
             i++;
