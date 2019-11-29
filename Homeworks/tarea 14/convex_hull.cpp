@@ -35,7 +35,7 @@ double ConvexHull::_distance(Point a, Point b) {
 }
 
 
-/* Compare function between two points lowest and lefmost */
+/* Returns true if 'a' is the lowest and lefmost */
 bool ConvexHull::_compare(Point a, Point b) {
     return a.get_y() < b.get_y() || (a.get_y() == b.get_y() && a.get_x() < b.get_x());
 }
@@ -44,13 +44,21 @@ bool ConvexHull::_compare(Point a, Point b) {
 /* Compara the angle for two points by the lowest angle*/
 bool ConvexHull::_compare_angle(Point a, Point b) {
     if (_cross(_pivot, a, b) == 0.0) {
-        return _distance(_pivot, a) < _distance(_pivot, b);
+        if (_pivot.get_x() < a.get_x()) {
+            // The closer point must be first
+            return _distance(_pivot, a) < _distance(_pivot, b);
+        } else {
+            // The farthest point must be first
+            return _distance(_pivot, a) > _distance(_pivot, b);
+        }
     }
 
-    double d1x = a.get_x() - _pivot.get_x(), d1y = a.get_y() - _pivot.get_y();
-    double d2x = b.get_x() - _pivot.get_x(), d2y = b.get_y() - _pivot.get_y();
+    double delta_1x = a.get_x() - _pivot.get_x();
+    double delta_1y = a.get_y() - _pivot.get_y();
+    double delta_2x = b.get_x() - _pivot.get_x();
+    double delta_2y = b.get_y() - _pivot.get_y();
 
-    return (atan2(d1y, d1x) - atan2(d2y, d2x)) < 0;
+    return (atan2(delta_1y, delta_1x) - atan2(delta_2y, delta_2x)) < 0;
 }
 
 
@@ -134,11 +142,13 @@ vector<Point> ConvexHull::graham_scan(vector<Point> points, bool collinears) {
         }
     }
     // Set pivot and set points[0] to points[start]
-    _pivot = points[0];
-    points[0] = points[start];
-    points[start] = _pivot;
+    _pivot = points[start];
+    points[start] = points[0];
+    points[0] = _pivot;
     // Sort the points around the pivot
-    sort(++points.begin(), points.end(), _compare);
+    sort(++points.begin(), points.end(), _compare_angle);
+    // ConvexHull::_print(points);
+
     vector<Point> hull;
 
     // Set the 3 first points
@@ -146,14 +156,25 @@ vector<Point> ConvexHull::graham_scan(vector<Point> points, bool collinears) {
     hull.push_back(points[0]);
     hull.push_back(points[1]);
 
-    for (uint i = 0; i < size; ) {
+    for (uint i = 2; i <= size; ) {
         uint j = hull.size() - 1;
-        if (_cross(hull[j-1], hull[j], points[i]) > 0) {
-            hull.push_back(points[i++]);
+        // cout << "taked " << hull[j-1].get_x() << " " << hull[j-1].get_y() << ", " << hull[j].get_x() << " " << hull[j].get_y() << ", " << points[i%size].get_x() << " " << points[i%size].get_y() << endl;
+        // cout << j-1 << " " << j << " " << i%size << endl;
+        double cross = _cross(hull[j-1], hull[j], points[i % size]);
+        // cout << cross << endl;
+        if (collinears && cross >= 0) {
+            hull.push_back(points[i%size]);
+            i++;
+        } else if (!collinears && cross > 0) {
+            hull.push_back(points[i%size]);
+            i++;
         } else {
             hull.pop_back();
         }
     }
+
+    hull.erase(hull.begin());
+    hull.pop_back();
 
     return hull;
 }
@@ -199,7 +220,7 @@ vector<Point> ConvexHull::andrew_monotone_chain(vector<Point> points, bool colli
 }
 
 
-void ConvexHull::draw(vector<Point> points, vector<Point> hull, double scalling_factor) {
+void ConvexHull::draw(vector<Point> points, vector<Point> hull, double scalling_factor, string file_name) {
     Draw draw(1024, 768);
-    draw.draw_points(points, hull, scalling_factor, "output.png");
+    draw.draw_points(points, hull, scalling_factor, file_name);
 }

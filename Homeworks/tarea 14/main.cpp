@@ -89,6 +89,7 @@ int main(int argc, char * argv[]) {
     time = (double(t_end - t_start) / CLOCKS_PER_SEC);
     cout << "Time: " << time << endl;
     ConvexHull::_print(result_points);
+    ConvexHull::draw(points, result_points, 2.0, "jarvis.png");
 
     cout << "Graham's Scan" << endl;
     t_start=clock();
@@ -97,6 +98,7 @@ int main(int argc, char * argv[]) {
     time = (double(t_end - t_start) / CLOCKS_PER_SEC);
     cout << "Time: " << time << endl;
     ConvexHull::_print(result_points);
+    ConvexHull::draw(points, result_points, 2.0, "graham.png");
 
     cout << "Andrew's Monotone Chain" << endl;
     t_start=clock();
@@ -105,8 +107,8 @@ int main(int argc, char * argv[]) {
     time = (double(t_end - t_start) / CLOCKS_PER_SEC);
     cout << "Time: " << time << endl;
     ConvexHull::_print(result_points);
+    ConvexHull::draw(points, result_points, 2.0, "andrew.png");
 
-    ConvexHull::draw(points, result_points, 2.0);
 
     return 0;
 }

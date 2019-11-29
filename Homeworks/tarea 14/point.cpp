@@ -1,7 +1,9 @@
-// externs includes
+#include <iostream>
+
 #define POINT_IMPORT
 #include "point.hpp"
 
+using namespace std;
 
 Point::Point(double x, double y) {
     _x = x;

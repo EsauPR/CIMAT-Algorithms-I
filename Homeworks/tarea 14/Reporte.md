@@ -12,7 +12,28 @@ Oscar Esaú Peralta Rosales
 
 ## Envolvente convexa
 
+Sea un conjunto de puntos $X$ en un espacio, aquel subconjunto de $X$ con cardinalidad mínima que contenga a todos los puntos de $X$ en su representación espacial se le conoce como envolvente convexa.
 
+<img src="/home/esaup/Documentos/CIMAT/Programación y Algoritmos 1/Algorithms-I/Homeworks/tarea 14/Reporte.assets/download.png" alt="Combinatorial Geometry – My Two Cents" style="zoom:25%;" />
+
+### Algoritmos
+
+#### Jarvis’s March
+
+Se basa en el cálculo de los ángulos formados por un punto pivote de $X$ el cual debe pertenecer al borde contra todos los demás. Se encuentra el primer punto pivote; aquel con las coordenadas en $x$ o en $y$ más pequeña o grande (en $2D$).  Luego se procede a calcular los ángulos formados con los demás puntos y aquel punto que forme el ángulo más chico es tomado como nuestro nuevo pivote. El procedimiento se repite hasta llegar encontrar que el nuevo pivote es el pivote inicial.
+
+Para una implementación mas sencilla, se usa el producto cruz formado por una triada de puntos, se se conserva el orden en el que se hacen las operaciones podemos usar los signos de dicho producto para saber si un punto está dentro del polígono o forma parte de la envoltura.
+
+```pseudocode
+points[] <- Vector de puntos iniciales
+hull[] <- Vector de que contendra los puntos de la envolvente convexa
+
+pivot <- Encontrar algún punto más alejado en X o Y
+
+
+```
+
+Nótese que es difil
 
 ## Implementación y Resultados
 

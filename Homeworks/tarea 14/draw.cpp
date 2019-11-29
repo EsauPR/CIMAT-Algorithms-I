@@ -1,4 +1,4 @@
-// externs includes
+#include <iostream>
 #define DRAW_IMPORT
 #include "draw.hpp"
 
@@ -41,11 +41,13 @@ void Draw::draw_points(vector<Point> points, vector<Point> hull, double scalling
 
     Point last = hull[hull.size()-1];
     for (uint i = 0; i < hull.size(); i++) {
-        cairo_move_to(_cr, last.get_x()*scalling_factor, last.get_y()*scalling_factor);
+        cairo_move_to(_cr, last.get_x()*scalling_factor,  last.get_y()*scalling_factor);
         cairo_line_to(_cr, hull[i].get_x()*scalling_factor, hull[i].get_y()*scalling_factor);
         last = hull[i];
     }
 
     cairo_stroke(_cr);
     cairo_surface_write_to_png(_surface, file_ouput.c_str());
+
+    cout << "Image saved in: " << file_ouput << endl << endl;
 }
