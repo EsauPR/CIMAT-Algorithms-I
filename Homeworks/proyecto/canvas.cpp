@@ -67,7 +67,7 @@ void CCanvas::draw_board(Cairo::RefPtr<Cairo::Context> const & cr) {
 bool CCanvas::on_draw(Cairo::RefPtr<Cairo::Context> const & cr) {
     draw_board(cr);
     for (int i = 0; i < _board_size; i++) {
-        draw_queen(cr, i, _solution[i]);
+        draw_queen(cr, _solution[i], i);
     }
 
     return true;
