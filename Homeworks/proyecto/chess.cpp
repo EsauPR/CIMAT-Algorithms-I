@@ -1,7 +1,7 @@
 /**
     C++, standard: c++11
     chess.coo
-    Purpose: Implementation for Class to solve n queen problem with k fixed queens
+    Purpose: Implementation to solve n queen problem with k fixed queens
 
     @author Esaú Peralta
     @email esau.opr@gmail.com

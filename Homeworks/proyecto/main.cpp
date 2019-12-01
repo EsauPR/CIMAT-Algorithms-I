@@ -1,3 +1,12 @@
+/**
+    C++, standard: c++11
+    main.cpp
+    Purpose: N-Queens problem maximization with k-fixed queens
+
+    @author Esaú Peralta
+    @email esau.opr@gmail.com
+*/
+
 #include <iostream>
 #include "chess.hpp"
 

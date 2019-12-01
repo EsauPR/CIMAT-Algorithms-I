@@ -1,7 +1,19 @@
+/**
+    C++, standard: c++11
+    canvas.cpp
+    Purpose: Canvas for cheess board
+
+    @author Esaú Peralta
+    @email esau.opr@gmail.com
+*/
+
+// Includes
+
+#define CANVAS_IMPORT
 #include "canvas.hpp"
-#include <iostream>
 
 using namespace std;
+
 
 CCanvas::CCanvas(vector<int> solution, int spacing_size) {
     _board_size = solution.size();
@@ -10,6 +22,7 @@ CCanvas::CCanvas(vector<int> solution, int spacing_size) {
 }
 
 
+/* Draw a queen in any cell position */
 void CCanvas::draw_queen(const Cairo::RefPtr<Cairo::Context>& cr, int i, int j) {
     double offset = _spacing_size / 5.0;
     double side = offset * 3;
@@ -45,6 +58,7 @@ void CCanvas::draw_queen(const Cairo::RefPtr<Cairo::Context>& cr, int i, int j) 
 }
 
 
+/* Draw the board */
 void CCanvas::draw_board(Cairo::RefPtr<Cairo::Context> const & cr) {
     cr->set_line_width(0.5);
 
@@ -64,6 +78,7 @@ void CCanvas::draw_board(Cairo::RefPtr<Cairo::Context> const & cr) {
 }
 
 
+/* Draw a board and queens for any solution*/
 bool CCanvas::on_draw(Cairo::RefPtr<Cairo::Context> const & cr) {
     draw_board(cr);
     for (int i = 0; i < _board_size; i++) {

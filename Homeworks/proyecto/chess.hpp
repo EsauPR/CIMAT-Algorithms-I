@@ -1,7 +1,18 @@
+/**
+    C++, standard: c++11
+    chess.coo
+    Purpose: Prototype to solve n queen problem with k fixed queens
+
+    @author Esaú Peralta
+    @email esau.opr@gmail.com
+*/
+
 #ifndef CHESS_H
+
 #include <set>
 #include <map>
 #include <vector>
+
 #ifdef CHESS_IMPORT
     #define EXTERN
 #else
@@ -21,10 +32,10 @@ class Chess {
         map<int, int> _fixed_positions;
         set<int> _fixed_queens_cols;
 
-
         bool _is_under_attack(int col);
         void _solve(int col);
         void _show_ascii_solution(vector<int> board);
+
 
     public:
         Chess(int size);
