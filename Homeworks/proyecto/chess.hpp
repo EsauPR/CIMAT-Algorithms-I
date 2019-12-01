@@ -39,7 +39,7 @@ class Chess {
 
     public:
         Chess(int size);
-        void place_queen(int row, int col);
+        bool place_queen(int row, int col);
         void solve();
         void show(int argc, char** argv);
 };

@@ -29,7 +29,7 @@ int main(int argc, char * argv[]) {
     for (int i = 0; i < n_fixed_queens; i++) {
         cout << "Coordenates for queen " << i+1 << ": ";
         cin >> x >> y;
-        chess.place_queen(x, y);
+        if(!chess.place_queen(x, y)) i--;
     }
 
 

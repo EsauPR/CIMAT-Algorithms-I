@@ -24,15 +24,24 @@ Chess::Chess(int size) {
 
 }
 
-void Chess::place_queen(int row, int col) {
+bool Chess::place_queen(int row, int col) {
     if (row >= _size || col >= _size) {
-        cout << "Invalid Position" << endl;
-        return;
+        cout << "Warning: Invalid Position" << endl;
+        return false;
     }
     // Working by cols
     _board[col] = row;
+
+    if (_is_under_attack(col)) {
+        _board[col] = -2;
+        cout << "Warning: The Queen can't not be placed here" << endl;
+        return false;
+    }
+
     _fixed_queens_cols.insert(col);
     _fixed_positions[col] = row;
+
+    return true;
 }
 
 
