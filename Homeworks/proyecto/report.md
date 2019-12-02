@@ -8,7 +8,7 @@ Durante el acercamiento dado en este proyecto, se planteó una variante al probl
 
 ### Metodología
 
-Edsger Dijkstra, uno de los personajes mas representativos en el área de las Ciencias de la Computación usó este problema para presentar una solución a través del algoritmo de *backtracking*. La idea esencial de este algoritmo radica en construir y/o buscar la mejor solución generada de resolver problemas más pequeños o similares  generados por las combinaciones de las posibilidades de toma de decisiones sobre cómo se podría generar una solución.
+Edsger Dijkstra, uno de los personajes mas representativos en el área de las Ciencias de la Computación usó este problema para presentar una solución a través del algoritmo de *backtracking*. La idea esencial de este algoritmo radica en construir y/o buscar la mejor solución generada de resolver problemas más pequeños o similares generados por las combinaciones de las posibilidades de toma de decisiones sobre cómo se podría generar una solución.
 
 En el juego de ajedrez la reina debe cumplir con las siguientes restricciones:
 
@@ -21,6 +21,8 @@ Por tanto para colocar varías reinas en el tablero se reduce a:
 -   Dos o más reinas no pueden estar en la misma diagonal.
 
 La solución mediante backtracking se basa en las restricciones anteriores. Como a lo más debe existir una reina por columna, el problema se reduce generar las distintas combinaciones de colocar una reina por cada columna y verificar cual de ellas es válida.
+
+
 
 ```pseudocode
 /* 
@@ -48,9 +50,13 @@ function find_solutions(current_col)
 find_solutions(0)
 ```
 
+
+
 La solución presentada en el pseudocódigo anterior resuelve una serie de subproblemas (generar las posibles combinaciones de colocar una reina en una columna) recursivamente, y una vez que se logra resolverlos una nueva solución es obtenida.
 
 Cada vez que se coloca una reina en una columna, es necesario verificar que la configuración generada hasta el momento en el tablero es válida. Para ello basta con comparar que la última pieza colocada no esté en la misma fila o en diagonal con otra pieza. Notemos que si dos reinas están en la misma diagonal podemos formar un triángulo rectángulo cuyos catetos tienen la misma dimensión:
+
+
 
 ```pseudocode
 function is_valid_config(current_col):
@@ -66,10 +72,15 @@ function is_valid_config(current_col):
 	return true
 ```
 
+
+
 Para resolver el problema de maximizar el número de reinas posibles dadas una serie de reinas fijas tenemos que realizar una serie de modificaciones al pseudocódigo anterior:
 
 -   Las soluciones son generadas colocando reinas de izquierda a derecha a través de las columnas. Si una reina no puede ser colocada en columnas previas dado que las reinas fijas lo impiden, el decidir no colocar una reina en una columna debe formar parte de la solución.
+
 -   Se debe contar el número de reinas colocadas en cada solución y quedarse con la que la maximice.
+
+    
 
 ```pseudocode
 /* 
@@ -106,7 +117,11 @@ function find_solutions(current_col, queens_placed)
 find_solutions(0, 0)
 ```
 
+
+
 La función de verificación de la configuración del tablero ahora debe buscar sobre todo este para verificar con las reinas fijas y no solo hasta la columna actual.
+
+
 
 ```pseudocode
 function is_valid_config(current_col):
@@ -129,7 +144,47 @@ Uno de los objetivos de este proyecto es realizar la implementación del algorit
 -   Chess: Abstracción de la metodología de solución sobre un tablero de ajedrez de $nxn$.
 -   CCanvas: Abstracción de un tablero de ajedrez gráfico que implementa las funcionalidades necesarias para dibujar en pantalla una de las soluciones obtenidas usando las bibliotecas de *GTK* y *Cairo*.
 
-El siguiente diagrama de clases en *UML* muestra las relaciones entre clases
+El siguiente diagrama de clases en *UML* muestra las relaciones entre clases implementadas:
 
-<img src="/home/esaup/Documentos/CIMAT/Programación y Algoritmos 1/Algorithms-I/Homeworks/proyecto/report.assets/Untitled Diagram.png" alt="Untitled Diagram"  />
 
+
+<figure style="text-align:center;">
+    <img src="/home/esaup/Documentos/CIMAT/Programación y Algoritmos 1/Algorithms-I/Homeworks/proyecto/report.assets/Untitled Diagram.png" alt="" width="50%"/>
+    <figcaption style="font-size:10px;" > Fig 1. Diagrama de clases UML <figcaption>
+<figure>
+
+Como ilustración se muestra la solución para un tablero de $8x8$ celdas con dos reinas fijas con la configuración siguiente:
+
+
+
+```
+Board size: 8
+Number of fixed queens: 2
+Coordenates for queen 1: 0 0
+Coordenates for queen 2: 3 5
+
+ Q  -  -  -  -  -  -  - 
+ -  -  -  -  -  -  Q  - 
+ -  -  -  Q  -  -  -  - 
+ -  -  -  -  -  Q  -  - 
+ -  -  -  -  -  -  -  Q 
+ -  Q  -  -  -  -  -  - 
+ -  -  -  -  Q  -  -  - 
+ -  -  Q  -  -  -  -  - 
+
+Maximun number of queens placed: 8
+```
+
+
+
+<figure style="text-align:center;">
+    <img src="/home/esaup/Documentos/CIMAT/Programación y Algoritmos 1/Algorithms-I/Homeworks/proyecto/report.assets/Screenshot_20191202_161822.png" alt="" width="40%"/>
+    <figcaption style="font-size:10px;" > Fig 2. Solución para un tablero de 8x8 con 2 reinas fijas <figcaption>
+<figure>
+
+
+### Conclusiones
+
+Dado que buscamos todas las soluciones al generar la combinación de las posibles casillas que puede ocupar una reina en cada columna, la explosión combinatoria del número de soluciones es grande (aunque debido a las restricciones del problema no crece tan rápidamente) haciendo de este un algoritmo lento y costoso mientras más grande es el tablero; por ejemplo para un tablero de $16x16$ el número de soluciones es $14,772,512$.
+
+Una posible alternativa es utilizar algunas heurísticas junto con algoritmos evolutivos/genéticos para generar soluciones plausibles y poder reducir así la complejidad de este método de búsqueda exhaustiva como lo es el backtraking.

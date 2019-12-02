@@ -111,6 +111,8 @@ void Chess::_solve(int col, int placed_queens) {
         }
         return;
     }
+    // The maximun is reached, it is unneccesary to coninue searching
+    if (_max_queens_placed == _size) return;
     // Jump fixed queen
     if (_fixed_queens_cols.count(col)) {
         _solve(col + 1, placed_queens + 1);

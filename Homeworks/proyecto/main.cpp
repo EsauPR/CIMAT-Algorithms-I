@@ -21,9 +21,11 @@ int main(int argc, char * argv[]) {
     cin >> board_size;
 
     Chess chess(board_size);
+    do {
+        cout << "Number of fixed queens: ";
+        cin >> n_fixed_queens;
+    } while(n_fixed_queens >= board_size);
 
-    cout << "Number of fixed queens: ";
-    cin >> n_fixed_queens;
 
     int x, y;
     for (int i = 0; i < n_fixed_queens; i++) {
