@@ -124,3 +124,12 @@ function is_valid_config(current_col):
 
  ### Implementación y resultados
 
+Uno de los objetivos de este proyecto es realizar la implementación del algoritmo a través de la metodología de Programación Orientada a Objetos. Así, se definieron las siguientes clases
+
+-   Chess: Abstracción de la metodología de solución sobre un tablero de ajedrez de $nxn$.
+-   CCanvas: Abstracción de un tablero de ajedrez gráfico que implementa las funcionalidades necesarias para dibujar en pantalla una de las soluciones obtenidas usando las bibliotecas de *GTK* y *Cairo*.
+
+El siguiente diagrama de clases en *UML* muestra las relaciones entre clases
+
+<img src="/home/esaup/Documentos/CIMAT/Programación y Algoritmos 1/Algorithms-I/Homeworks/proyecto/report.assets/Untitled Diagram.png" alt="Untitled Diagram"  />
+

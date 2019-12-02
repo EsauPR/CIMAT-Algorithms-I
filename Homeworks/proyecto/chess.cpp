@@ -20,7 +20,7 @@ using namespace std;
 
 Chess::Chess(int size) {
     _size = size;
-    _board.resize(_size, -2);
+    _board.resize(_size, -1);
 
 }
 
@@ -29,17 +29,21 @@ bool Chess::place_queen(int row, int col) {
         cout << "Warning: Invalid Position" << endl;
         return false;
     }
+
+    if(_fixed_queens_cols.count(col)) {
+        cout << "Warning: The Queen can't not be placed on this column" << endl;
+        return false;
+    }
+
     // Working by cols
     _board[col] = row;
-
     if (_is_under_attack(col)) {
-        _board[col] = -2;
+        _board[col] = -1;
         cout << "Warning: The Queen can't not be placed here" << endl;
         return false;
     }
 
     _fixed_queens_cols.insert(col);
-    _fixed_positions[col] = row;
 
     return true;
 }
@@ -84,17 +88,11 @@ void Chess::show(int argc, char** argv) {
 bool Chess::_is_under_attack(int col) {
     if (_board[col] == -1) return false; // No queen placed
     // Check from col 0 until current col
-    for (int i = 0; i < col ; i++) {
-        if (_board[i] == -1) continue; // No queen placed
+    for (int i = 0; i < _size; i++) {
+        // No queen placedor or same col
+        if (_board[i] == -1 || col == i) continue;
         // Same row or in diagonal
-        if (_board[col] == _board[i] || col - i == abs(_board[i] - _board[col])) {
-            return true;
-        }
-    }
-    // Verify for fixed queens in an specifiq cols
-    for (map<int, int>::iterator it = _fixed_positions.begin(); it != _fixed_positions.end(); it++) {
-        // Same row or in diagonal
-        if (_board[col] == it->second || abs(col - it->first) == abs(_board[col] - it->second)) {
+        if (_board[col] == _board[i] || abs(col - i) == abs(_board[i] - _board[col])) {
             return true;
         }
     }
@@ -103,40 +101,36 @@ bool Chess::_is_under_attack(int col) {
 }
 
 
-void Chess::_solve(int col) {
+void Chess::_solve(int col, int placed_queens) {
     // Last col reached
     if (col == _size) {
         // _show_ascii_solution(_board);
-        if (_max_queens_placed < _queens_placed) {
+        if (_max_queens_placed < placed_queens) {
             _solution = _board;
-            _max_queens_placed = _queens_placed;
+            _max_queens_placed = placed_queens;
         }
         return;
     }
     // Jump fixed queen
     if (_fixed_queens_cols.count(col)) {
-        _solve(col + 1);
+        _solve(col + 1, placed_queens + 1);
         return;
     }
     // Try to put a queen in any row for this col
-    for (int row = -1; row < _size; row++) {
-        if (row != -1) {
-            _queens_placed ++;
-        }
+    for (int row = 0; row < _size; row++) {
         _board[col] = row;
         if (!_is_under_attack(col)) {
-            _solve(col + 1);
-        }
-        if (row != -1) {
-            _queens_placed --;
+            _solve(col + 1, placed_queens + 1);
         }
     }
+    // Solve without place any queen
+    _board[col] = -1;
+    _solve(col + 1, placed_queens);
 }
 
 
 void Chess::solve() {
     _nsols = 0;
     _max_queens_placed = 0;
-    _queens_placed = _fixed_queens_cols.size();
-    _solve(0);
+    _solve(0, 0);
 }

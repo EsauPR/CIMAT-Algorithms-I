@@ -27,13 +27,11 @@ class Chess {
         vector<int> _solution;
         int _size = 0;
         int _nsols = 0;
-        int _queens_placed = 0;
         int _max_queens_placed = 0;
-        map<int, int> _fixed_positions;
         set<int> _fixed_queens_cols;
 
         bool _is_under_attack(int col);
-        void _solve(int col);
+        void _solve(int col, int placed_queens);
         void _show_ascii_solution(vector<int> board);
 
 
