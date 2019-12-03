@@ -1,10 +1,15 @@
+<div style="text-align:center;">
+    <h5 style="font-weight: normal;"> Oscar Esaú Peralta Rosales <h5>
+    <h6 style="font-weight: normal;"> Proyecto Final - Programación y Algoritmos I <h6>
+</div>
+
 # Problema de las $N$ Reinas:
 
 ## Maximización de la solución con $K$ Reinas fijas
 
 La primer versión del problema fue planteada en 1848 por el jugador de Ajedrez *Max Brezzel* el cual consistía en colocar 8 reinas en una tablero de ajedrez de dimensiones $8x8$ sin que se exista alguna amenaza por parte de estas piezas. Las distintas formas de colocar las 8 reinas en un tablero de $(8x8)$ son 12 y 80 más a partir de diversas transformaciones de rotación y reflexión. Este problema se puede generalizar al intentar colocar $n$ reinas en un tablero de $nxn$.
 
-Durante el acercamiento dado en este proyecto, se planteó una variante al problema. Sea un tablero de dimensiones $nxn$ y dadas las posiciones de un número $k$ de reinas fijas en el tablero, ¿cuál es el número máximo de reinas que se pueden colocar posteriormente? 
+Durante el acercamiento dado en este proyecto, se planteó una variante al problema. Sea un tablero de dimensiones $nxn$ y dadas las posiciones de un número $k$ de reinas fijas en el tablero, ¿Cuál es el número máximo de reinas que se pueden colocar posteriormente?
 
 ### Metodología
 
@@ -25,7 +30,7 @@ La solución mediante backtracking se basa en las restricciones anteriores. Como
 
 
 ```pseudocode
-/* 
+/*
 	Búsqueda de soluciones mediante backtraking
 	para colocar n reinas
 */
@@ -80,10 +85,10 @@ Para resolver el problema de maximizar el número de reinas posibles dadas una s
 
 -   Se debe contar el número de reinas colocadas en cada solución y quedarse con la que la maximice.
 
-    
+
 
 ```pseudocode
-/* 
+/*
 	Búsqueda de soluciones mediante backtraking
 	para maximizar el número de reinas con k reinas fijas
 */
@@ -97,7 +102,7 @@ best_solution[n] <- Mejor solución
 function find_solutions(current_col, queens_placed)
 	if (current_col == n_queens)
 		// Si tenemos una mejor solución la guardamos
-		if (max_queens_placed < queens_placed) 
+		if (max_queens_placed < queens_placed)
 			max_queens_placed = queens_placed
 			best_solution = board
 		return
@@ -149,9 +154,10 @@ El siguiente diagrama de clases en *UML* muestra las relaciones entre clases imp
 
 
 <figure style="text-align:center;">
-    <img src="/home/esaup/Documentos/CIMAT/Programación y Algoritmos 1/Algorithms-I/Homeworks/proyecto/report.assets/Untitled Diagram.png" alt="" width="50%"/>
+    <img src="/home/esau/Documentos/CIMAT/Cursos/1er Semestre/Programación y Algoritmos I/Algorithms-I/Homeworks/proyecto/report.assets/Untitled Diagram.png" alt="" width="60%"/>
     <figcaption style="font-size:10px;" > Fig 1. Diagrama de clases UML <figcaption>
 <figure>
+
 
 Como ilustración se muestra la solución para un tablero de $8x8$ celdas con dos reinas fijas con la configuración siguiente:
 
@@ -163,14 +169,14 @@ Number of fixed queens: 2
 Coordenates for queen 1: 0 0
 Coordenates for queen 2: 3 5
 
- Q  -  -  -  -  -  -  - 
- -  -  -  -  -  -  Q  - 
- -  -  -  Q  -  -  -  - 
- -  -  -  -  -  Q  -  - 
- -  -  -  -  -  -  -  Q 
- -  Q  -  -  -  -  -  - 
- -  -  -  -  Q  -  -  - 
- -  -  Q  -  -  -  -  - 
+ Q  -  -  -  -  -  -  -
+ -  -  -  -  -  -  Q  -
+ -  -  -  Q  -  -  -  -
+ -  -  -  -  -  Q  -  -
+ -  -  -  -  -  -  -  Q
+ -  Q  -  -  -  -  -  -
+ -  -  -  -  Q  -  -  -
+ -  -  Q  -  -  -  -  -
 
 Maximun number of queens placed: 8
 ```
@@ -178,9 +184,10 @@ Maximun number of queens placed: 8
 
 
 <figure style="text-align:center;">
-    <img src="/home/esaup/Documentos/CIMAT/Programación y Algoritmos 1/Algorithms-I/Homeworks/proyecto/report.assets/Screenshot_20191202_161822.png" alt="" width="40%"/>
+    <img src="/home/esau/Documentos/CIMAT/Cursos/1er Semestre/Programación y Algoritmos I/Algorithms-I/Homeworks/proyecto/report.assets/Screenshot_20191202_161822.png" alt="" width="50%"/>
     <figcaption style="font-size:10px;" > Fig 2. Solución para un tablero de 8x8 con 2 reinas fijas <figcaption>
 <figure>
+
 
 
 ### Conclusiones
@@ -188,3 +195,5 @@ Maximun number of queens placed: 8
 Dado que buscamos todas las soluciones al generar la combinación de las posibles casillas que puede ocupar una reina en cada columna, la explosión combinatoria del número de soluciones es grande (aunque debido a las restricciones del problema no crece tan rápidamente) haciendo de este un algoritmo lento y costoso mientras más grande es el tablero; por ejemplo para un tablero de $16x16$ el número de soluciones es $14,772,512$.
 
 Una posible alternativa es utilizar algunas heurísticas junto con algoritmos evolutivos/genéticos para generar soluciones plausibles y poder reducir así la complejidad de este método de búsqueda exhaustiva como lo es el backtraking.
+
+Aunque el número de soluciones es más grande con el aumento del tamaño de tablero, la opción de fijar reinas decrementa la complejidad de este mismo, haciendo posible encontrar una solución para tableros de $15x15$ en unos segundos.
